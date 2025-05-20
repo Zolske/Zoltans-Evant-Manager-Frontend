@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.zoltanseventmanagerfrontend" />
+                  <option name="mobileSdkAppId" value="1:991091657721:android:ae4e3c192ffed120eb8b28" />
+                  <option name="projectId" value="zoltans-event-manager-4fe54" />
+                  <option name="projectNumber" value="991091657721" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
