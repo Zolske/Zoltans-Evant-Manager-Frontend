@@ -1,4 +1,4 @@
-package com.example.zoltanseventmanagerfrontend.ui
+package com.kepes.zoltanseventmanagerfrontend.ui
 
 import android.content.Intent
 import android.util.Log
@@ -60,6 +60,7 @@ fun SignInScreen() {
         if (account != null) {
             Text("Welcome, ${account!!.displayName}", fontWeight = FontWeight.Bold)
             Text("Email: ${account!!.email}")
+            Text("id tokken: ${account!!.idToken}")
             Spacer(modifier = Modifier.height(16.dp))
             Image(
                 painter = rememberAsyncImagePainter(account!!.photoUrl),

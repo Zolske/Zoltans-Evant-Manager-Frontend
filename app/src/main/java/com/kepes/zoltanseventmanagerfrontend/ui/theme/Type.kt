@@ -1,4 +1,4 @@
-package com.example.zoltanseventmanagerfrontend.ui.theme
+package com.kepes.zoltanseventmanagerfrontend.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

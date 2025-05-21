@@ -1,4 +1,4 @@
-package com.example.zoltanseventmanagerfrontend.ui.theme
+package com.kepes.zoltanseventmanagerfrontend.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

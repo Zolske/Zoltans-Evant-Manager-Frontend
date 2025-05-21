@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,17 +7,21 @@ plugins {
 }
 
 android {
-    namespace = "com.example.zoltanseventmanagerfrontend"
+    namespace = "com.kepes.zoltanseventmanagerfrontend"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.zoltanseventmanagerfrontend"
+        applicationId = "com.kepes.zoltanseventmanagerfrontend"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val secretKeys = Properties()
+        secretKeys.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "WEB_CLIENT_ID", secretKeys.getProperty("WEB_CLIENT_ID"))
     }
 
     buildTypes {
@@ -36,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

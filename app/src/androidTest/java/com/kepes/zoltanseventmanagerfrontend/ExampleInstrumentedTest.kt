@@ -1,4 +1,4 @@
-package com.example.zoltanseventmanagerfrontend
+package com.kepes.zoltanseventmanagerfrontend
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
