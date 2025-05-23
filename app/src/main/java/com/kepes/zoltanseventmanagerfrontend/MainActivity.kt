@@ -12,12 +12,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.credentials.*
+import androidx.lifecycle.viewModelScope
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.kepes.zoltanseventmanagerfrontend.data.NetworkUserRepository
+import com.kepes.zoltanseventmanagerfrontend.service.UserApiService
+import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kepes.zoltanseventmanagerfrontend.data.RetrofitInstance
 
 class MainActivity : ComponentActivity() {
 
@@ -68,16 +75,30 @@ fun GoogleSignInScreen(webClientId: String) {
                     if (credential is CustomCredential &&
                         credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
                     ) {
-                        val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                        val googleIdTokenCredential =
+                            GoogleIdTokenCredential.createFrom(credential.data)
                         val idToken = googleIdTokenCredential.idToken
                         val displayName = googleIdTokenCredential.displayName ?: "Unknown"
 
                         signInStatus = "Signed in as $displayName\nID Token:\n$idToken"
 
                         // TODO: Send `idToken` to your backend for verification
-                    } else {
-                        signInStatus = "Unexpected credential type"
+                        Log.i("READY ", "send request" )
+                        try {
+                            //val response = RetrofitInstance.api.getUser("something")
+                            //val response = RetrofitInstance.api.getUser(idToken)
+                            Log.i("RESPONSE ", "before" )
+                            val responseGreeting = RetrofitInstance.api.getGreeting()
+                            Log.i("RESPONSE ", responseGreeting )
+                            //And Remove the advice with _advice
+                            //userDataState.value = "user name is: ${response.name}"
+                        } catch (e: Exception) {
+                            //userDataState.value = "Error: ${e.message}"
+                            Log.i("RESPONSE ", e.message.toString())
+                        }
                     }
+                    // TODO: Send `idToken` to your backend for verification
+
                 //} catch (e: GetCredentialException) {
                 } catch (e: GoogleIdTokenParsingException) {
                     signInStatus = "Sign-in failed: ${e.message}"
@@ -88,4 +109,32 @@ fun GoogleSignInScreen(webClientId: String) {
             Text("Sign in with Google")
         }
     }
+
+    /*
+    @Composable
+    fun UserApp(idToken: String) {
+        val viewModel: UserViewModel = viewModel()
+        val advice = viewModel.userDataState.value
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = advice,
+                //style = MaterialTheme.typography.headlineMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(16.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { viewModel.fetchUser(idToken) }) {
+                Text("Refresh Advice")
+            }
+        }
+
+    }
+    */
 }
