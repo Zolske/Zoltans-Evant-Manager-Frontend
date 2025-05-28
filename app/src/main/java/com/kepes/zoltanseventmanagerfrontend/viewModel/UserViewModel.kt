@@ -1,28 +1,30 @@
 package com.kepes.zoltanseventmanagerfrontend.viewModel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.kepes.zoltanseventmanagerfrontend.data.RetrofitInstance
-import kotlinx.coroutines.launch
+import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-class UserViewModel(idToken: String) : ViewModel() {
-    val userDataState = mutableStateOf("Fetching user data...")
+/**
+ * Handles the logic between the backend and the UI for the logged in User data
+ */
+class UserViewModel : ViewModel() {
 
-    init {
-        fetchUser(idToken)
+    /**
+     * logged in user state
+     */
+    // can only be seen and changed in this class
+    private val _userState = MutableStateFlow(LoggedUser())
+    // read only outside the class, but can be changed in this class
+    val userState: StateFlow<LoggedUser> = _userState.asStateFlow()
+
+    fun setJsonWebToken(jsonWebToken: String) {
+        _userState.update { currentState -> currentState.copy(jsonWebToken = jsonWebToken) }
     }
 
-    fun fetchUser(idToken: String) {
-        viewModelScope.launch {
-            try {
-                val response = RetrofitInstance.api.getUser(idToken)
-
-                //And Remove the advice with _advice
-                userDataState.value = "user name is: ${response.name}"
-            } catch (e: Exception) {
-                userDataState.value = "Error: ${e.message}"
-            }
-        }
+    fun setIdUser(idUser: String) {
+        _userState.update { currentState -> currentState.copy(idUser = idUser) }
     }
 }

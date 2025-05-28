@@ -81,5 +81,6 @@ dependencies {
     implementation(libs.converter.scalars)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.converter.gson)
-
+    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp)
 }
