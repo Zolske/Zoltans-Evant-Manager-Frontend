@@ -1,4 +1,4 @@
-package com.example.zoltanseventmanagerfrontend
+package com.kepes.zoltanseventmanagerfrontend
 
 import org.junit.Test
 
