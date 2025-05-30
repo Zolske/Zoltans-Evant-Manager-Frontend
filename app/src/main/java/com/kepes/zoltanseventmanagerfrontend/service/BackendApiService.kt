@@ -1,6 +1,7 @@
 package com.kepes.zoltanseventmanagerfrontend.service
 
 import com.kepes.zoltanseventmanagerfrontend.BuildConfig
+import com.kepes.zoltanseventmanagerfrontend.model.User
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,7 +34,20 @@ interface BackApiInter {
     suspend fun getAuth(
         @Header("google-id-token") headerGoogleIdToken: String
         //@Body request: LoginRequest
-    ): Response<String>
+    ): Response<User>
+
+    // all request (except 'auth') need to have
+    // @Header("Authorization") BearerToken: String
+
+    /**
+     * Get user Data from the backend Server,
+     */
+    @GET("user/data")
+    suspend fun getUserData(
+        @Header("Authorization") bearerToken: String,
+        @Header("user-id") userId: String
+        //@Body request: LoginRequest
+    ): Response<User>
 }
 
 /**

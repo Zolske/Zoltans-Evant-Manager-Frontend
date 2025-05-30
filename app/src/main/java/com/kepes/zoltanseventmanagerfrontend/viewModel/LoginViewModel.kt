@@ -14,9 +14,11 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.kepes.zoltanseventmanagerfrontend.BuildConfig
+import com.kepes.zoltanseventmanagerfrontend.model.User
 import com.kepes.zoltanseventmanagerfrontend.service.BackApiObject
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 
 sealed interface LoginUiState {
@@ -83,11 +85,13 @@ class LoginViewModel : ViewModel() {
      * @param userViewModel the userViewModel to update
      * @param googleIdToken the googleIdToken to send to the backend
      */
-    private suspend fun authBackend(userViewModel: UserViewModel, googleIdToken: String) {
+    private suspend fun authBackend(userViewModel: UserViewModel, googleIdToken: String) : User? {
         loginUiState = LoginUiState.Loading("Authenticating with Server...")
+        // resp. has the google user data not the server DB data, server JWT, ID is same for both
+        var response : Response<User>
         loginUiState = try {
             // Call the backend API, google ID token is passed in the header
-            val response =
+            response =
                 BackApiObject.retrofitService.getAuth(headerGoogleIdToken = googleIdToken)
             if (response.isSuccessful) {
                 // The JWT and the User ID are in the headers
@@ -95,6 +99,7 @@ class LoginViewModel : ViewModel() {
                 if (headers["json-web-token"] != null && headers["user-id"] != null) {
                     userViewModel.setJsonWebToken(headers["json-web-token"].toString())
                     userViewModel.setIdUser(headers["user-id"].toString())
+                    Log.i("RESPONSE", "${response.body()}")
                     LoginUiState.AuthBackend("Successfully authenticated with Server.")
                 } else {
                     var responseStatus = ""
@@ -116,13 +121,33 @@ class LoginViewModel : ViewModel() {
             LoginUiState.Error("Error (${e.message.toString()}): Something went wrong.")
             throw IOException(e)
         }
+        return response.body()
+    }
+
+    private suspend fun getUserData(userViewModel: UserViewModel) : Boolean {
+        loginUiState = LoginUiState.Loading("Get user data from Server...")
+        val response = BackApiObject.retrofitService.getUserData(
+            bearerToken = "Bearer ${userViewModel.userState.value.jsonWebToken}",
+            userId = userViewModel.userState.value.idUser)
+        if(response.isSuccessful && response.body() != null ) {
+            userViewModel.setUserData(response.body()!!)
+            //Log.i("USER DATA", "email: ${userViewModel.userState.value.email}")
+            loginUiState = LoginUiState.LoggedIn("Received user data from the Server.")
+            return true
+        }
+        else {
+            loginUiState = LoginUiState.SignUp("You have no account at the Server.")
+            return false
+        }
     }
 
     fun loginOrSignupUser(userViewModel: UserViewModel, context: Context, credentialManager: CredentialManager) {
         viewModelScope.launch {
             try {
                 var googleIdToken = authGoogle(context, credentialManager)
-                authBackend(userViewModel, googleIdToken)
+                var googleUserData = authBackend(userViewModel, googleIdToken)
+                if( !getUserData(userViewModel) )
+                    Log.i("TODO", "need to write logic to create user record.")
             } catch (e: Exception) {}
 
         }

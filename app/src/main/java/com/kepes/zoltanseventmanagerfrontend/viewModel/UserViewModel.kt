@@ -2,6 +2,7 @@ package com.kepes.zoltanseventmanagerfrontend.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
+import com.kepes.zoltanseventmanagerfrontend.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,4 +28,10 @@ class UserViewModel : ViewModel() {
     fun setIdUser(idUser: String) {
         _userState.update { currentState -> currentState.copy(idUser = idUser) }
     }
+    
+    fun setUserData(userData: User) {
+        _userState.update { currentState -> currentState.copy(
+            name = userData.name, email = userData.email, pictureUrl = userData.pictureUrl) }
+    }
+
 }
