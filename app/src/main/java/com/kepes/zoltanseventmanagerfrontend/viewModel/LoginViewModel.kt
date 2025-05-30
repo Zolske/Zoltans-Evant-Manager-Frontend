@@ -141,15 +141,21 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    fun loginOrSignupUser(userViewModel: UserViewModel, context: Context, credentialManager: CredentialManager) {
+    fun loginOrSignupUser(
+        userViewModel: UserViewModel,
+        context: Context,
+        credentialManager: CredentialManager,
+        changeToScreen: () -> Unit = {}
+    ) {
         viewModelScope.launch {
             try {
                 var googleIdToken = authGoogle(context, credentialManager)
                 var googleUserData = authBackend(userViewModel, googleIdToken)
-                if( !getUserData(userViewModel) )
+                if( getUserData(userViewModel) == false )
                     Log.i("TODO", "need to write logic to create user record.")
             } catch (e: Exception) {}
-
+            Log.i("Go to next", "go to next screen")
+            changeToScreen()
         }
     }
 

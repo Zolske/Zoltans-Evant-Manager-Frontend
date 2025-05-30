@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Zoltans Event Manager Frontend</string>
+    <string name="title_sc_login_signup">Login or Signup with Google</string>
+    <string name="title_sc_home">Zoltan\'s Event Manager</string>
+    <string name="title_sc_event">Event</string>
 </resources>

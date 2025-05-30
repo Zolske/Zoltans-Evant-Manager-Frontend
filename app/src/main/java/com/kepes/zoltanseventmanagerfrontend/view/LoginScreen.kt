@@ -24,7 +24,12 @@ import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
 
 @Composable
-fun LoginScreen(userViewModel: UserViewModel, loginViewModel: LoginViewModel, loginUiState: LoginUiState){
+fun LoginScreen(
+    userViewModel: UserViewModel,
+    loginViewModel: LoginViewModel,
+    loginUiState: LoginUiState,
+    changeToScreen: () -> Unit = {}
+){
     val context = LocalContext.current
     val credentialManager = remember { CredentialManager.create(context) }
 
@@ -36,8 +41,14 @@ fun LoginScreen(userViewModel: UserViewModel, loginViewModel: LoginViewModel, lo
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(onClick = {
-            loginViewModel.loginOrSignupUser(userViewModel, context, credentialManager)
-        }) {
+            loginViewModel.loginOrSignupUser(
+                userViewModel,
+                context,
+                credentialManager,
+                changeToScreen
+            )
+        })
+        {
             Text("'Sign in' or 'sign up' with Google")
         }
         when (loginUiState) {
@@ -49,5 +60,6 @@ fun LoginScreen(userViewModel: UserViewModel, loginViewModel: LoginViewModel, lo
             is LoggedIn -> Text("${loginUiState.eMessage}")
             is LoginUiState.Error -> Text("${loginUiState.eMessage}")
         }
+        Button(onClick = changeToScreen) { Text("Go to Home Screen")}
     }
 }

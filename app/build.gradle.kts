@@ -83,4 +83,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.okhttp)
+    // Navigating Screens
+    implementation(libs.androidx.navigation.compose)
 }
