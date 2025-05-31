@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.googleid)
     implementation(libs.play.services.auth)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     // Retrofit
     implementation(libs.retrofit2.kotlinx.serialization.converter)
@@ -85,4 +86,7 @@ dependencies {
     implementation(libs.okhttp)
     // Navigating Screens
     implementation(libs.androidx.navigation.compose)
+    // Image loading Coil
+    implementation(libs.coil3.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }

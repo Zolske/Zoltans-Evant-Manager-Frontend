@@ -7,13 +7,18 @@ import  androidx. compose. runtime. Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kepes.zoltanseventmanagerfrontend.view.LoginScreen
-import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
+import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
 import com.kepes.zoltanseventmanagerfrontend.view.HomeScreen
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 /**
  * enum values that represent the screens in the app
@@ -26,32 +31,37 @@ enum class AppScreens(@StringRes val title: Int) {
 
 @Composable
 fun ZoltansEventManagerApp(
-    userViewModel: UserViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ){
     val loginViewModel: LoginViewModel = viewModel()
+    var userState by remember { mutableStateOf(LoggedUser()) }
 
     Scaffold() { innerPadding ->
-        //val uiState by viewModel.uiState.colletAsState()
-
         NavHost(
             navController = navController,
             startDestination = AppScreens.Login.name,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = AppScreens.Login.name) {
+                TopBar(userState, AppScreens.Login.name, false) { }
                 LoginScreen(
-                    userViewModel,
+                    userState,
                     loginViewModel,
                     loginViewModel.loginUiState,
-                    changeToScreen = {navController.navigate(AppScreens.Home.name)})
+                    changeToScreen = {
+                        // pass changing to 'next screen' in but do not add Login to 'back stack'
+                        navController.navigate(AppScreens.Home.name){
+                            popUpTo(AppScreens.Login.name){
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
             }
             composable(route = AppScreens.Home.name) {
-                HomeScreen()
+                TopBar(userState, AppScreens.Home.name, true) { navController.popBackStack() }
+                HomeScreen(userState)
             }
         }
     }
-
-    //GoogleSignInScreen( userViewModel )
-    //LoginScreen(userViewModel, loginViewModel, loginViewModel.loginUiState)
 }

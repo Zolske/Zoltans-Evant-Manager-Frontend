@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
+import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.AuthBackend
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.AuthGoogle
@@ -21,11 +22,10 @@ import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.LoggedIn
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.NotLoggedIn
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.SignUp
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
-import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
 
 @Composable
 fun LoginScreen(
-    userViewModel: UserViewModel,
+    userState: LoggedUser,
     loginViewModel: LoginViewModel,
     loginUiState: LoginUiState,
     changeToScreen: () -> Unit = {}
@@ -42,7 +42,7 @@ fun LoginScreen(
     ) {
         Button(onClick = {
             loginViewModel.loginOrSignupUser(
-                userViewModel,
+                userState,
                 context,
                 credentialManager,
                 changeToScreen

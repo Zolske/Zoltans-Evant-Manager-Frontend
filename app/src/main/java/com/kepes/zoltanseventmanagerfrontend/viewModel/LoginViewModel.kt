@@ -14,6 +14,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.kepes.zoltanseventmanagerfrontend.BuildConfig
+import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.model.User
 import com.kepes.zoltanseventmanagerfrontend.service.BackApiObject
 import kotlinx.coroutines.launch
@@ -85,7 +86,7 @@ class LoginViewModel : ViewModel() {
      * @param userViewModel the userViewModel to update
      * @param googleIdToken the googleIdToken to send to the backend
      */
-    private suspend fun authBackend(userViewModel: UserViewModel, googleIdToken: String) : User? {
+    private suspend fun authBackend(userState: LoggedUser, googleIdToken: String) : User? {
         loginUiState = LoginUiState.Loading("Authenticating with Server...")
         // resp. has the google user data not the server DB data, server JWT, ID is same for both
         var response : Response<User>
@@ -97,9 +98,8 @@ class LoginViewModel : ViewModel() {
                 // The JWT and the User ID are in the headers
                 val headers = response.headers()
                 if (headers["json-web-token"] != null && headers["user-id"] != null) {
-                    userViewModel.setJsonWebToken(headers["json-web-token"].toString())
-                    userViewModel.setIdUser(headers["user-id"].toString())
-                    Log.i("RESPONSE", "${response.body()}")
+                    userState.idUser = headers["user-id"].toString()
+                    userState.jsonWebToken = headers["json-web-token"].toString()
                     LoginUiState.AuthBackend("Successfully authenticated with Server.")
                 } else {
                     var responseStatus = ""
@@ -124,14 +124,17 @@ class LoginViewModel : ViewModel() {
         return response.body()
     }
 
-    private suspend fun getUserData(userViewModel: UserViewModel) : Boolean {
+    private suspend fun getUserData(userState: LoggedUser) : Boolean {
         loginUiState = LoginUiState.Loading("Get user data from Server...")
         val response = BackApiObject.retrofitService.getUserData(
-            bearerToken = "Bearer ${userViewModel.userState.value.jsonWebToken}",
-            userId = userViewModel.userState.value.idUser)
+            bearerToken = "Bearer ${userState.jsonWebToken}",
+            userId = userState.idUser)
+
         if(response.isSuccessful && response.body() != null ) {
-            userViewModel.setUserData(response.body()!!)
-            //Log.i("USER DATA", "email: ${userViewModel.userState.value.email}")
+            userState.pictureUrl = response.body()!!.pictureUrl
+            userState.name = response.body()!!.name
+            userState.email = response.body()!!.email
+            userState.hasAccount = true
             loginUiState = LoginUiState.LoggedIn("Received user data from the Server.")
             return true
         }
@@ -142,7 +145,7 @@ class LoginViewModel : ViewModel() {
     }
 
     fun loginOrSignupUser(
-        userViewModel: UserViewModel,
+        userState: LoggedUser,
         context: Context,
         credentialManager: CredentialManager,
         changeToScreen: () -> Unit = {}
@@ -150,11 +153,11 @@ class LoginViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 var googleIdToken = authGoogle(context, credentialManager)
-                var googleUserData = authBackend(userViewModel, googleIdToken)
-                if( getUserData(userViewModel) == false )
+                var googleUserData = authBackend(userState, googleIdToken)
+                val hasAccount = getUserData(userState)
+                if( hasAccount == false )
                     Log.i("TODO", "need to write logic to create user record.")
             } catch (e: Exception) {}
-            Log.i("Go to next", "go to next screen")
             changeToScreen()
         }
     }

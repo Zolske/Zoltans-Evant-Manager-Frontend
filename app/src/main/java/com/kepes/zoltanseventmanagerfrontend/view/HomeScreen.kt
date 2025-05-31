@@ -9,9 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(userState: LoggedUser) {
 
     Column(
         modifier = Modifier
@@ -20,6 +21,6 @@ fun HomeScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-            Text("Home Screen")
+            Text("")
         }
 }
