@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
+import com.kepes.zoltanseventmanagerfrontend.ui.components.EventCard
 import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFrontendTheme
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 
@@ -31,17 +32,19 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        /*items(eventList.size) { index ->
+            //EventCard(eventList[index].title, eventList[index].desc_short, eventList[index].date, eventList[index].time, eventList[index].address, actionBtn = { })
+        }*/
         items(eventList.size) { index ->
-            Text(eventList[index].title)
+            EventCard(eventList[index].title, eventList[index].descShort, eventList[index].date, eventList[index].time, eventList[index].address, actionBtn = { })
         }
 
-        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     ZoltansEventManagerFrontendTheme {
-        /*HomeScreen(LoggedUser())*/
     }
 }

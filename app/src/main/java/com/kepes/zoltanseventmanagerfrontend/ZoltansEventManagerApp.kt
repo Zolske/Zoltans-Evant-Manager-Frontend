@@ -19,7 +19,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
 import com.kepes.zoltanseventmanagerfrontend.model.Event
+import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFrontendTheme
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 
 /**
@@ -68,5 +70,19 @@ fun ZoltansEventManagerApp(
                 HomeScreen(userState, eventViewModel)
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    ZoltansEventManagerFrontendTheme {
+            val loginViewModel: LoginViewModel = viewModel()
+            val eventViewModel: EventViewModel = viewModel()
+            var userState by remember { mutableStateOf(LoggedUser())
+            }
+
+        //TopBar(userState, AppScreens.Home.name, false)
+        HomeScreen(userState, eventViewModel)
     }
 }

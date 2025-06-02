@@ -9,7 +9,7 @@ data class Event (
     var idEvent: Long,
     var title: String,
     @SerialName(value = "description_short")
-    var desc_short: String,
+    var descShort: String,
     @SerialName(value = "description")
     var desc: String,
     var date: String,
