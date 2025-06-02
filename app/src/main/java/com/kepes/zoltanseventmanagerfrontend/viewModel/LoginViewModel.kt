@@ -155,6 +155,7 @@ class LoginViewModel : ViewModel() {
                 var googleIdToken = authGoogle(context, credentialManager)
                 var googleUserData = authBackend(userState, googleIdToken)
                 val hasAccount = getUserData(userState)
+                Log.i("JWT", userState.jsonWebToken)
                 if( hasAccount == false )
                     Log.i("TODO", "need to write logic to create user record.")
             } catch (e: Exception) {}

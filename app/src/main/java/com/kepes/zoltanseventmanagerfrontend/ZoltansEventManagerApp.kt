@@ -19,6 +19,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.kepes.zoltanseventmanagerfrontend.model.Event
+import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 
 /**
  * enum values that represent the screens in the app
@@ -34,7 +36,10 @@ fun ZoltansEventManagerApp(
     navController: NavHostController = rememberNavController()
 ){
     val loginViewModel: LoginViewModel = viewModel()
+    val eventViewModel: EventViewModel = viewModel()
     var userState by remember { mutableStateOf(LoggedUser()) }
+    /*var allEventsState by remember { mutableStateOf(mutableListOf<Event>()) }*/
+    //var allEventsState by remember mutableStateListOf<Event>()
 
     Scaffold() { innerPadding ->
         NavHost(
@@ -60,7 +65,7 @@ fun ZoltansEventManagerApp(
             }
             composable(route = AppScreens.Home.name) {
                 TopBar(userState, AppScreens.Home.name, true) { navController.popBackStack() }
-                HomeScreen(userState)
+                HomeScreen(userState, eventViewModel)
             }
         }
     }

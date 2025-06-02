@@ -1,6 +1,7 @@
 package com.kepes.zoltanseventmanagerfrontend.service
 
 import com.kepes.zoltanseventmanagerfrontend.BuildConfig
+import com.kepes.zoltanseventmanagerfrontend.model.Event
 import com.kepes.zoltanseventmanagerfrontend.model.User
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -30,24 +31,30 @@ interface BackApiInter {
      * need to send the googleIdToken in the header,
      * string response is not used.
      */
-    @GET("auth")
+    @GET("api/auth")
     suspend fun getAuth(
         @Header("google-id-token") headerGoogleIdToken: String
         //@Body request: LoginRequest
     ): Response<User>
 
-    // all request (except 'auth') need to have
+    // all request (except 'api/auth') need to have
     // @Header("Authorization") BearerToken: String
 
     /**
      * Get user Data from the backend Server,
      */
-    @GET("user/data")
+    @GET("api/user/data")
     suspend fun getUserData(
         @Header("Authorization") bearerToken: String,
         @Header("user-id") userId: String
         //@Body request: LoginRequest
     ): Response<User>
+
+    @GET("api/events/all")
+    suspend fun getAllEvents(
+        @Header("Authorization") bearerToken: String,
+        @Header("user-id") userId: String
+    ): Response<MutableList<Event>>
 }
 
 /**
