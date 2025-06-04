@@ -1,13 +1,16 @@
 package com.kepes.zoltanseventmanagerfrontend.service
 
 import com.kepes.zoltanseventmanagerfrontend.BuildConfig
+import com.kepes.zoltanseventmanagerfrontend.data.CreateSubscriptionRequest
 import com.kepes.zoltanseventmanagerfrontend.model.Event
 import com.kepes.zoltanseventmanagerfrontend.model.User
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 
 // url to the backend server
 private const val BASE_URL = BuildConfig.BASE_URL_BACKEND
@@ -55,6 +58,12 @@ interface BackApiInter {
         @Header("Authorization") bearerToken: String,
         @Header("user-id") userId: String
     ): Response<MutableList<Event>>
+
+    @POST("api/subscription/subscribe")
+    suspend fun subscribeToEvent(
+        @Header("Authorization") bearerToken: String,
+        @Body request: CreateSubscriptionRequest
+    ): Response<Unit>
 }
 
 /**

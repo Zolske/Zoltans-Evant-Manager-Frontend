@@ -42,7 +42,6 @@ fun EventCard(
     address: String,
     actionBtn: () -> Unit) {
     ElevatedCard(
-        //.size(width = 240.dp, height = 155.dp)
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier.padding(6.dp).height(155.dp).fillMaxWidth(),
         colors = CardDefaults.cardColors(

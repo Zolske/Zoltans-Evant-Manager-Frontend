@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.kepes.zoltanseventmanagerfrontend.model.Event
 import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFrontendTheme
@@ -67,7 +68,7 @@ fun ZoltansEventManagerApp(
             }
             composable(route = AppScreens.Home.name) {
                 TopBar(userState, AppScreens.Home.name, true) { navController.popBackStack() }
-                HomeScreen(userState, eventViewModel)
+                HomeScreen(userState, eventViewModel, LocalContext.current)
             }
         }
     }
@@ -83,6 +84,6 @@ fun HomeScreenPreview() {
             }
 
         //TopBar(userState, AppScreens.Home.name, false)
-        HomeScreen(userState, eventViewModel)
+        HomeScreen(userState, eventViewModel, LocalContext.current)
     }
 }
