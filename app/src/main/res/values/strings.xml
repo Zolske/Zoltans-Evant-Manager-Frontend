@@ -3,4 +3,5 @@
     <string name="title_sc_login_signup">Login or Signup with Google</string>
     <string name="title_sc_home">Zoltan\'s Event Manager</string>
     <string name="title_sc_event">Event</string>
+    <string name="title_subscribed_events">Subscribed Events</string>
 </resources>

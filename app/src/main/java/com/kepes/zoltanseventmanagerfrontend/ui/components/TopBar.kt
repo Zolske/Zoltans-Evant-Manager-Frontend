@@ -1,6 +1,7 @@
 package com.kepes.zoltanseventmanagerfrontend.ui.components
 
 import android.util.Log
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -40,6 +41,7 @@ fun TopBar(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
+                modifier = Modifier.height(100.dp),
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
@@ -66,7 +68,7 @@ fun TopBar(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .padding(5.dp)
-                                .size(60.dp) // Adjust size as needed
+                                .size(45.dp) // Adjust size as needed
                                 .clip(CircleShape)
                         )
                         IconButton(onClick = { /* do something */ }) {
@@ -80,10 +82,8 @@ fun TopBar(
                 },
             )
         },
-    ) { innerPadding -> Text(
-        "",
-        modifier = Modifier.padding(innerPadding),
-    ) }
+    ) { innerPadding -> Text("",modifier = Modifier.padding(innerPadding)) }
+
 }
 
 @Preview(showBackground = true)

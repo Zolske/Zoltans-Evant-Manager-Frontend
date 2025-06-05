@@ -9,6 +9,7 @@ import com.kepes.zoltanseventmanagerfrontend.data.CreateSubscriptionRequest
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.model.Event
 import com.kepes.zoltanseventmanagerfrontend.service.BackApiObject
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -66,24 +67,26 @@ class EventViewModel : ViewModel() {
     }
 
     fun subscribeToEvent(context: Context, userState: LoggedUser, eventId: Long) {
-        viewModelScope.launch {
-            try {
-                Log.i("EVENT SUBSCRIPTION", "Event ID: $eventId, User ID: ${userState.idUser}")
-                var response = BackApiObject.retrofitService.subscribeToEvent(
-                    bearerToken = "Bearer ${userState.jsonWebToken}",
-                    request = CreateSubscriptionRequest(
-                        userId = userState.idUser,
-                        eventId = eventId
+        fun subscribeToEvent(userState: LoggedUser, eventId: Long) {
+            viewModelScope.launch {
+                try {
+                    Log.i("EVENT SUBSCRIPTION", "Event ID: $eventId, User ID: ${userState.idUser}")
+                    var response = BackApiObject.retrofitService.subscribeToEvent(
+                        bearerToken = "Bearer ${userState.jsonWebToken}",
+                        request = CreateSubscriptionRequest(
+                            userId = userState.idUser,
+                            eventId = eventId
+                        )
                     )
-                )
-                if (response.isSuccessful) {
-                    Toast.makeText(
-                        context,
-                        response.headers()["msg"].toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    if (response.isSuccessful) {
+                        Toast.makeText(
+                            context,
+                            response.headers()["msg"].toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } catch (e: Exception) {
                 }
-            } catch (e: Exception) {
             }
         }
     }

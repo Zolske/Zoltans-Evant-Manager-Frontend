@@ -19,14 +19,14 @@ import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFronten
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 
 @Composable
-fun HomeScreen(
+fun SubscribedEvent(
     userState: LoggedUser,
     eventViewModel: EventViewModel,
     context: Context,
     modifier: Modifier
 ) {
     val eventList by eventViewModel.eventListFlow.collectAsState()
-   eventViewModel.getAllEvents(userState)
+    eventViewModel.getAllEvents(userState)
 
     LazyColumn(
         modifier = Modifier
@@ -51,11 +51,4 @@ fun HomeScreen(
 
     }
 
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    ZoltansEventManagerFrontendTheme {
-    }
 }
