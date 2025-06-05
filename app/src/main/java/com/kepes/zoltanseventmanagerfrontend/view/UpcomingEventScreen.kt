@@ -10,23 +10,32 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.ui.components.EventCard
-//import com.kepes.zoltanseventmanagerfrontend.ui.components.EventNavigationTab
-import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFrontendTheme
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
+import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
+
 
 @Composable
-fun SubscribedEvent(
-    userState: LoggedUser,
+fun UpcomingEventScreen(
     eventViewModel: EventViewModel,
-    context: Context,
-    modifier: Modifier
+    loggedUserViewModel: LoggedUserViewModel,
+    context: Context
 ) {
+    /*    Box (modifier = Modifier
+            .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+            Text(
+                text = "Upcoming Events Screen",
+                style = MaterialTheme.typography.headlineLarge
+            )
+        }*/
+
     val eventList by eventViewModel.eventListFlow.collectAsState()
-    eventViewModel.getAllEvents(userState)
+    val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
+    eventViewModel.getAllEvents(loggedUser)
 
     LazyColumn(
         modifier = Modifier
@@ -42,11 +51,13 @@ fun SubscribedEvent(
                 eventList[index].date,
                 eventList[index].time,
                 eventList[index].address,
-                actionBtn = {eventViewModel.subscribeToEvent(
-                    context = context,
-                    userState = userState,
-                    eventId = eventList[index].idEvent
-                ) })
+                actionBtn = {
+                    eventViewModel.subscribeToEvent(
+                        context = context,
+                        userState = loggedUser,
+                        eventId = eventList[index].idEvent
+                    )
+                })
         }
 
     }

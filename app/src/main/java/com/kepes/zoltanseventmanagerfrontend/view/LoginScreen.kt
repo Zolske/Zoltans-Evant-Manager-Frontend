@@ -11,10 +11,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
-import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
+import androidx.navigation.NavHostController
+import com.kepes.zoltanseventmanagerfrontend.data.Screen
+import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.AuthBackend
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.AuthGoogle
@@ -26,10 +27,10 @@ import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
 
 @Composable
 fun LoginScreen(
-    userState: LoggedUser,
+    loggedUser: LoggedUserViewModel,
     loginViewModel: LoginViewModel,
     loginUiState: LoginUiState,
-    changeToScreen: () -> Unit = {}
+    navController: NavHostController
 ){
     val context = LocalContext.current
     val credentialManager = remember { CredentialManager.create(context) }
@@ -43,10 +44,11 @@ fun LoginScreen(
     ) {
         Button(onClick = {
             loginViewModel.loginOrSignupUser(
-                userState,
+                loggedUser,
                 context,
                 credentialManager,
-                changeToScreen
+                // go to the following screen if logged in successfully
+                {navController.navigate(Screen.UpcomingEvents.rout)}
             )
         })
         {
@@ -61,6 +63,5 @@ fun LoginScreen(
             is LoggedIn -> Text("${loginUiState.eMessage}")
             is LoginUiState.Error -> Text("${loginUiState.eMessage}")
         }
-        Button(onClick = changeToScreen) { Text("Go to Home Screen")}
     }
 }

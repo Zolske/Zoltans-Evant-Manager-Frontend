@@ -8,9 +8,12 @@ package com.kepes.zoltanseventmanagerfrontend.data
 data class LoggedUser(
     var jsonWebToken: String = "",
     var idUser: String = "",
-    var hasAccount: Boolean = false,
     var name: String = "",
     var email: String = "",
-    var pictureUrl: String = ""
+    var pictureUrl: String = "",
+    var hasAccount: Boolean = false,
+    var isLoggedIn: Boolean = false,
+    var isAdmin: Boolean = false,
+    var isRootAdmin: Boolean = false
 )
 

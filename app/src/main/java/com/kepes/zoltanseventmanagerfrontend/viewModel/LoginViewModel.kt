@@ -86,7 +86,7 @@ class LoginViewModel : ViewModel() {
      * @param userViewModel the userViewModel to update
      * @param googleIdToken the googleIdToken to send to the backend
      */
-    private suspend fun authBackend(userState: LoggedUser, googleIdToken: String) : User? {
+    private suspend fun authBackend(loggedUser: LoggedUserViewModel, googleIdToken: String) : User? {
         loginUiState = LoginUiState.Loading("Authenticating with Server...")
         // resp. has the google user data not the server DB data, server JWT, ID is same for both
         var response : Response<User>
@@ -98,8 +98,8 @@ class LoginViewModel : ViewModel() {
                 // The JWT and the User ID are in the headers
                 val headers = response.headers()
                 if (headers["json-web-token"] != null && headers["user-id"] != null) {
-                    userState.idUser = headers["user-id"].toString()
-                    userState.jsonWebToken = headers["json-web-token"].toString()
+                    loggedUser.idUser = headers["user-id"].toString()
+                    loggedUser.jsonWebToken = headers["json-web-token"].toString()
                     LoginUiState.AuthBackend("Successfully authenticated with Server.")
                 } else {
                     var responseStatus = ""
@@ -124,17 +124,18 @@ class LoginViewModel : ViewModel() {
         return response.body()
     }
 
-    private suspend fun getUserData(userState: LoggedUser) : Boolean {
+    private suspend fun getUserData(loggedUser: LoggedUserViewModel) : Boolean {
         loginUiState = LoginUiState.Loading("Get user data from Server...")
         val response = BackApiObject.retrofitService.getUserData(
-            bearerToken = "Bearer ${userState.jsonWebToken}",
-            userId = userState.idUser)
+            bearerToken = "Bearer ${loggedUser.jsonWebToken}",
+            userId = loggedUser.idUser)
 
         if(response.isSuccessful && response.body() != null ) {
-            userState.pictureUrl = response.body()!!.pictureUrl
-            userState.name = response.body()!!.name
-            userState.email = response.body()!!.email
-            userState.hasAccount = true
+            loggedUser.pictureUrl = response.body()!!.pictureUrl
+            loggedUser.name = response.body()!!.name
+            loggedUser.email = response.body()!!.email
+            loggedUser.hasAccount = true
+            loggedUser.isLoggedIn = true
             loginUiState = LoginUiState.LoggedIn("Received user data from the Server.")
             return true
         }
@@ -145,21 +146,23 @@ class LoginViewModel : ViewModel() {
     }
 
     fun loginOrSignupUser(
-        userState: LoggedUser,
+        loggedUser: LoggedUserViewModel,
         context: Context,
         credentialManager: CredentialManager,
-        changeToScreen: () -> Unit = {}
+        changeToScreen: () -> Unit
     ) {
         viewModelScope.launch {
             try {
                 var googleIdToken = authGoogle(context, credentialManager)
-                var googleUserData = authBackend(userState, googleIdToken)
-                val hasAccount = getUserData(userState)
-                Log.i("JWT", userState.jsonWebToken)
+                var googleUserData = authBackend(loggedUser, googleIdToken)
+                val hasAccount = getUserData(loggedUser)
+                Log.i("JWT", loggedUser.jsonWebToken)
+                Log.i("LOGIN USER", "user has account: ${loggedUser.hasAccount}")
                 if( hasAccount == false )
                     Log.i("TODO", "need to write logic to create user record.")
+                else
+                    changeToScreen()
             } catch (e: Exception) {}
-            changeToScreen()
         }
     }
 

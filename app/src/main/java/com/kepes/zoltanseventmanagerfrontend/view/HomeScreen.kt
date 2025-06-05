@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.ui.components.EventCard
-import com.kepes.zoltanseventmanagerfrontend.ui.components.EventNavigationTab
+//import com.kepes.zoltanseventmanagerfrontend.ui.components.EventNavigationTab
 import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFrontendTheme
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 

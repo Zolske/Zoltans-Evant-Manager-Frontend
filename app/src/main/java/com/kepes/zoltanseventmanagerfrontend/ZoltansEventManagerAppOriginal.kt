@@ -1,3 +1,4 @@
+/*
 package com.kepes.zoltanseventmanagerfrontend
 
 import androidx.annotation.StringRes
@@ -24,58 +25,72 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.createGraph
-import com.kepes.zoltanseventmanagerfrontend.data.Screen
 import com.kepes.zoltanseventmanagerfrontend.model.Event
 import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomAppBarExample
-import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomNavigationBar
-//import com.kepes.zoltanseventmanagerfrontend.ui.components.UpcomingEventScreen
 import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFrontendTheme
 import com.kepes.zoltanseventmanagerfrontend.view.SubscribedEvent
-import com.kepes.zoltanseventmanagerfrontend.view.SubscribedEventScreen
-import com.kepes.zoltanseventmanagerfrontend.view.UpcomingEventScreen
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
-import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 
+*/
 /**
  * enum values that represent the screens in the app
- */
-/*enum class AppScreens(@StringRes val title: Int) {
+ *//*
+
+enum class AppScreens(@StringRes val title: Int) {
     Login(title = R.string.title_sc_login_signup),
     Home(title = R.string.title_sc_home),
     SubscribedEvent(title = R.string.title_subscribed_events)
-}*/
+}
 
 @Preview(showBackground = true)
 @Composable
 fun ZoltansEventManagerApp(
     navController: NavHostController = rememberNavController()
-) {
+){
     val loginViewModel: LoginViewModel = viewModel()
     val eventViewModel: EventViewModel = viewModel()
-    val loggedUserViewModel: LoggedUserViewModel = viewModel()
-    //var userState by remember { mutableStateOf(LoggedUser()) }
+    var userState by remember { mutableStateOf(LoggedUser()) }
+    */
+/*var allEventsState by remember { mutableStateOf(mutableListOf<Event>()) }*//*
 
-    Scaffold(
-        bottomBar = { BottomNavigationBar(navController, loggedUserViewModel) }
-    ) { innerPadding ->
+    //var allEventsState by remember mutableStateListOf<Event>()
 
-        val graph = navController.createGraph(startDestination = Screen.Login.rout) {
-                composable(route = Screen.Login.rout) {
-                    LoginScreen(loggedUserViewModel, loginViewModel, loginViewModel.loginUiState, navController)
-                }
-                composable(route = Screen.UpcomingEvents.rout) {
-                    UpcomingEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
-                }
-                composable(route = Screen.SubscribedEvents.rout) {
-                    SubscribedEventScreen()
-                }
-            }
-
+    Scaffold() { innerPadding ->
         NavHost(
             navController = navController,
-            graph = graph,
+            startDestination = AppScreens.Login.name,
             modifier = Modifier.padding(innerPadding)
-        )
+        ) {
+            composable(route = AppScreens.Login.name) {
+                TopBar(userState, AppScreens.Login.name, false) { }
+
+                LoginScreen(
+                    userState,
+                    loginViewModel,
+                    loginViewModel.loginUiState,
+                    changeToScreen = {
+                        // pass changing to 'next screen' in but do not add Login to 'back stack'
+                        navController.navigate(AppScreens.SubscribedEvent.name){
+                            popUpTo(AppScreens.Login.name){
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+
+
+            }
+*/
+/*            composable(route = AppScreens.Home.name) {
+                TopBar(userState, AppScreens.Home.name, true) { navController.popBackStack() }
+                HomeScreen(userState, eventViewModel, LocalContext.current, modifier  = Modifier.padding(top = 105.dp))
+            }*//*
+
+            composable(route = AppScreens.SubscribedEvent.name) {
+                TopBar(userState, "Subscribed Events", true) { navController.popBackStack() }
+                SubscribedEvent(userState, eventViewModel, LocalContext.current, modifier  = Modifier.padding(top = 105.dp))
+            }
+        }
     }
 }
+*/

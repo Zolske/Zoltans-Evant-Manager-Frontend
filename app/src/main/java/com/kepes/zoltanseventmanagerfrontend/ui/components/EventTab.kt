@@ -1,3 +1,4 @@
+/*
 package com.kepes.zoltanseventmanagerfrontend.ui.components
 
 import androidx.compose.foundation.layout.Box
@@ -114,3 +115,4 @@ AppNavHost(
     startDestination = startDestination)
 }
 }
+*/
