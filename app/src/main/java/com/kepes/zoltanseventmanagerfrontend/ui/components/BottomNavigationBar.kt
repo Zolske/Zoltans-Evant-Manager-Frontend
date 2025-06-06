@@ -113,6 +113,7 @@ fun BottomNavigationBar(navController: NavController, loggedUserViewModel: Logge
                 )
             }
         }
+
     }
 }
 

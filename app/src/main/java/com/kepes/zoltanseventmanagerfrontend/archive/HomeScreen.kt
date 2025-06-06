@@ -26,7 +26,7 @@ fun HomeScreen(
     modifier: Modifier
 ) {
     val eventList by eventViewModel.eventListFlow.collectAsState()
-   eventViewModel.getAllEvents(userState)
+   //eventViewModel.getAllEvents(userState)
 
     LazyColumn(
         modifier = Modifier
