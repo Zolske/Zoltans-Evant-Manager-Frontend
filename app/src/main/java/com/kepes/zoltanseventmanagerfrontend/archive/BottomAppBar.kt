@@ -1,3 +1,4 @@
+/*
 package com.kepes.zoltanseventmanagerfrontend.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
@@ -42,7 +43,9 @@ fun BottomAppBarExample() {
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         FloatingActionButton(
-                            onClick = { /* do something */ },
+                            onClick = { */
+/* do something *//*
+ },
                             containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                         ) {
@@ -53,7 +56,9 @@ fun BottomAppBarExample() {
                             )
                         }
                         FloatingActionButton(
-                            onClick = { /* do something */ },
+                            onClick = { */
+/* do something *//*
+ },
                             containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                         ) {
@@ -64,7 +69,9 @@ fun BottomAppBarExample() {
                             )
                         }
                         FloatingActionButton(
-                            onClick = { /* do something */ },
+                            onClick = { */
+/* do something *//*
+ },
                             containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                             elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                         ) {
@@ -85,4 +92,4 @@ fun BottomAppBarExample() {
             text = ""
         )
     }
-}
+}*/

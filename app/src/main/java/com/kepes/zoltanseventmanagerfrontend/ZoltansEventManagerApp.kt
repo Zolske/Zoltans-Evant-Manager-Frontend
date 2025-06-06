@@ -1,10 +1,7 @@
 package com.kepes.zoltanseventmanagerfrontend
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import  androidx. compose. runtime. Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -14,24 +11,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
-import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
-import com.kepes.zoltanseventmanagerfrontend.view.HomeScreen
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.createGraph
 import com.kepes.zoltanseventmanagerfrontend.data.Screen
-import com.kepes.zoltanseventmanagerfrontend.model.Event
-import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomAppBarExample
+//import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomAppBarExample
 import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomNavigationBar
 //import com.kepes.zoltanseventmanagerfrontend.ui.components.UpcomingEventScreen
-import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFrontendTheme
-import com.kepes.zoltanseventmanagerfrontend.view.SubscribedEvent
 import com.kepes.zoltanseventmanagerfrontend.view.SubscribedEventScreen
 import com.kepes.zoltanseventmanagerfrontend.view.UpcomingEventScreen
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel

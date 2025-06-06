@@ -1,4 +1,4 @@
-package com.kepes.zoltanseventmanagerfrontend.view
+package com.kepes.zoltanseventmanagerfrontend.archive
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement

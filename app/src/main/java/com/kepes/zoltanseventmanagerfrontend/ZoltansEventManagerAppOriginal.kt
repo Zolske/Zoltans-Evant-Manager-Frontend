@@ -16,8 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
-import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
-import com.kepes.zoltanseventmanagerfrontend.view.HomeScreen
+import com.kepes.zoltanseventmanagerfrontend.archive.TopBar
+import com.kepes.zoltanseventmanagerfrontend.archive.HomeScreen
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember

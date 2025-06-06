@@ -1,3 +1,4 @@
+/*
 package com.kepes.zoltanseventmanagerfrontend.view
 
 import android.content.Context
@@ -52,3 +53,4 @@ fun SubscribedEvent(
     }
 
 }
+*/

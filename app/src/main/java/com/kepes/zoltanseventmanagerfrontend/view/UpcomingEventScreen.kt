@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.ui.components.EventCard
+import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 
@@ -36,7 +37,7 @@ fun UpcomingEventScreen(
     val eventList by eventViewModel.eventListFlow.collectAsState()
     val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
     eventViewModel.getAllEvents(loggedUser)
-
+    TopBar("Upcoming Events", loggedUser.pictureUrl)
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
