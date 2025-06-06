@@ -58,4 +58,7 @@ class LoggedUserViewModel : ViewModel() {
             _loggedUserFlow.value = _loggedUserFlow.value.copy(isRootAdmin = value)
         }
 
+    fun resetLoggedUser() {
+        _loggedUserFlow.value = LoggedUser()
+    }
 }

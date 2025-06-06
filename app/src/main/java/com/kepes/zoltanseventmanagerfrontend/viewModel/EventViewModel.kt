@@ -90,4 +90,8 @@ class EventViewModel : ViewModel() {
             }
         }
     }
+
+    fun resetEvents(){
+        _eventListFlow.value = emptyList()
+    }
 }

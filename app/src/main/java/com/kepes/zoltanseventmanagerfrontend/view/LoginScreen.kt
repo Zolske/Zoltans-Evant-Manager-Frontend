@@ -20,6 +20,7 @@ import androidx.credentials.CredentialManager
 import androidx.navigation.NavHostController
 import com.kepes.zoltanseventmanagerfrontend.data.Screen
 import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
+import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.AuthBackend
@@ -33,6 +34,7 @@ import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
 @Composable
 fun LoginScreen(
     loggedUserViewModel: LoggedUserViewModel,
+    eventViewModel: EventViewModel,
     loginViewModel: LoginViewModel,
     loginUiState: LoginUiState,
     navController: NavHostController
@@ -51,30 +53,39 @@ fun LoginScreen(
             TopBar(title = "Logout", userUrl = loggedUser.pictureUrl)
         else
             TopBar(title = "Login", userUrl = "")
+
         Spacer(modifier = Modifier.height(100.dp))
-        Button(
-            onClick = {
-                loginViewModel.loginOrSignupUser(
-                    loggedUserViewModel,
-                    context,
-                    credentialManager,
-                    // go to the following screen if logged in successfully
-                    { navController.navigate(Screen.UpcomingEvents.rout) }
-                )
-            },
-        )
-        {
-            Text("'Sign in' or 'sign up' with Google")
-        }
+
+        if (loggedUser.isLoggedIn == false)
+            Button(
+                onClick = {
+                    loginViewModel.loginOrSignupUser(
+                        loggedUserViewModel,
+                        context,
+                        credentialManager,
+                        // go to the following screen if logged in successfully
+                        { navController.navigate(Screen.UpcomingEvents.rout) }
+                    )
+                },
+            ) { Text("Sign IN or UP with your Google account") }
+        else
+            Button(
+                onClick = {
+                    loggedUserViewModel.resetLoggedUser()
+                    eventViewModel.resetEvents()
+                }) { Text("Logout") }
+
         Spacer(modifier = Modifier.height(100.dp))
-        when (loginUiState) {
-            is NotLoggedIn -> Text("${loginUiState.eMessage}")
-            is Loading -> Text("${loginUiState.eMessage}")
-            is AuthGoogle -> Text("${loginUiState.eMessage}")
-            is AuthBackend -> Text("${loginUiState.eMessage}")
-            is SignUp -> Text("${loginUiState.eMessage}")
-            is LoggedIn -> Text("${loginUiState.eMessage}")
-            is LoginUiState.Error -> Text("${loginUiState.eMessage}")
-        }
+
+        if (loggedUser.isLoggedIn == false)
+            when (loginUiState) {
+                is NotLoggedIn -> Text("${loginUiState.eMessage}")
+                is Loading -> Text("${loginUiState.eMessage}")
+                is AuthGoogle -> Text("${loginUiState.eMessage}")
+                is AuthBackend -> Text("${loginUiState.eMessage}")
+                is SignUp -> Text("${loginUiState.eMessage}")
+                is LoggedIn -> Text("${loginUiState.eMessage}")
+                is LoginUiState.Error -> Text("${loginUiState.eMessage}")
+            }
     }
 }

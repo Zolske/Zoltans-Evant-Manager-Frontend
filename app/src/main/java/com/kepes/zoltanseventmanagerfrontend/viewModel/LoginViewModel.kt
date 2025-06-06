@@ -10,6 +10,7 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
@@ -53,6 +54,8 @@ class LoginViewModel : ViewModel() {
         val request = GetCredentialRequest.Builder()
             .addCredentialOption(googleIdOption)
             .build()
+
+
 
         loginUiState = LoginUiState.Loading("Authenticating with Google...")
         loginUiState = try {

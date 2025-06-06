@@ -48,7 +48,7 @@ fun ZoltansEventManagerApp(
 
         val graph = navController.createGraph(startDestination = Screen.Login.rout) {
                 composable(route = Screen.Login.rout) {
-                    LoginScreen(loggedUserViewModel, loginViewModel, loginViewModel.loginUiState, navController)
+                    LoginScreen(loggedUserViewModel, eventViewModel, loginViewModel, loginViewModel.loginUiState, navController)
                 }
                 composable(route = Screen.UpcomingEvents.rout) {
                     UpcomingEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
