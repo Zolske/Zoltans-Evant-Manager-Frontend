@@ -152,7 +152,7 @@ class LoginViewModel : ViewModel() {
         loggedUser: LoggedUserViewModel,
         context: Context,
         credentialManager: CredentialManager,
-        changeToScreen: () -> Unit
+        //changeToScreen: () -> Unit
     ) {
         viewModelScope.launch {
             try {
@@ -163,8 +163,8 @@ class LoginViewModel : ViewModel() {
                 Log.i("LOGIN USER", "user has account: ${loggedUser.hasAccount}")
                 if( hasAccount == false )
                     Log.i("TODO", "need to write logic to create user record.")
-                else
-                    changeToScreen()
+/*                else
+                    changeToScreen()*/
             } catch (e: Exception) {}
         }
     }

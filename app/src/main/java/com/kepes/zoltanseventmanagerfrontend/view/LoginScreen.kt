@@ -64,7 +64,7 @@ fun LoginScreen(
                         context,
                         credentialManager,
                         // go to the following screen if logged in successfully
-                        { navController.navigate(Screen.UpcomingEvents.rout) }
+                        //{ navController.navigate(Screen.UpcomingEvents.rout) }
                     )
                 },
             ) { Text("Sign IN or UP with your Google account") }

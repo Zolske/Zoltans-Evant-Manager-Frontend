@@ -1,3 +1,4 @@
+/*
 package com.kepes.zoltanseventmanagerfrontend.archive
 
 import android.content.Context
@@ -58,4 +59,4 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     ZoltansEventManagerFrontendTheme {
     }
-}
+}*/

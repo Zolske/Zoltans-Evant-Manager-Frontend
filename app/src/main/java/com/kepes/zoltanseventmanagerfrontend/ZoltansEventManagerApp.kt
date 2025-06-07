@@ -54,7 +54,7 @@ fun ZoltansEventManagerApp(
                     UpcomingEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
                 }
                 composable(route = Screen.SubscribedEvents.rout) {
-                    SubscribedEventScreen()
+                    SubscribedEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
                 }
             }
 

@@ -11,6 +11,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 // url to the backend server
 private const val BASE_URL = BuildConfig.BASE_URL_BACKEND
@@ -64,6 +65,18 @@ interface BackApiInter {
         @Header("Authorization") bearerToken: String,
         @Body request: CreateSubscriptionRequest
     ): Response<Unit>
+
+    @GET("api/subscription/subscribedEvents/{user-id}")
+    suspend fun getSubscribedEvents(
+        @Header("Authorization") bearerToken: String,
+        @Path("user-id") userId: String
+    ): Response<MutableList<Event>>
+
+    @GET("api/events/all_not_subscribed/{user-id}")
+    suspend fun getNotSubscribedEvents(
+        @Header("Authorization") bearerToken: String,
+        @Path("user-id") userId: String
+    ): Response<MutableList<Event>>
 }
 
 /**

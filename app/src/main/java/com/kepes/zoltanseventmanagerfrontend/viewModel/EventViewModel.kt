@@ -9,7 +9,6 @@ import com.kepes.zoltanseventmanagerfrontend.data.CreateSubscriptionRequest
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.model.Event
 import com.kepes.zoltanseventmanagerfrontend.service.BackApiObject
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,9 +23,12 @@ import kotlinx.coroutines.launch
  */
 class EventViewModel : ViewModel() {
     private val _eventListFlow = MutableStateFlow<List<Event>>(emptyList())
-
     // StateFlow for the list of events, which is observed by the UI
     val eventListFlow: StateFlow<List<Event>> = _eventListFlow
+
+    private val _subscribedEventListFlow = MutableStateFlow<List<Event>>(emptyList())
+    // StateFlow for the list of events, which is observed by the UI
+    val subscribedEventListFlow: StateFlow<List<Event>> = _subscribedEventListFlow
 
     /**
      * Adds an event to the eventListFlow
@@ -44,6 +46,12 @@ class EventViewModel : ViewModel() {
         val currentList = _eventListFlow.value.toMutableList()
         currentList.addAll(eventList)
         _eventListFlow.value = currentList.toList()
+    }
+
+    fun addSubscribedEventList(eventList: List<Event>) {
+        val currentList = _subscribedEventListFlow.value.toMutableList()
+        currentList.addAll(eventList)
+        _subscribedEventListFlow.value = currentList.toList()
     }
 
     /**
@@ -66,8 +74,50 @@ class EventViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Gets all events from the backend and adds them to the eventListFlow to which the user has
+     * not jet subscribed
+     */
+    fun getNotSubscribedEvents(userState: LoggedUser, context: Context) {
+        viewModelScope.launch {
+            try {
+                val response = BackApiObject.retrofitService.getNotSubscribedEvents(
+                    bearerToken = "Bearer ${userState.jsonWebToken}",
+                    userId = userState.idUser
+                )
+                if (response.isSuccessful) {
+                    addEventList(response.body()!!)
+                    Toast.makeText(
+                        context,
+                        response.headers()["msg"].toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Log.e("EVENT FETCH", "Error, fetching not subscribed events" +
+                        "(in 'getNotSubscribedEvents()'): ${e.message}")
+            }
+        }
+    }
+
+    fun getSubscribedEvents(userState: LoggedUser) {
+        var response: MutableList<Event>?
+        viewModelScope.launch {
+            try {
+                response = BackApiObject.retrofitService.getSubscribedEvents(
+                    bearerToken = "Bearer ${userState.jsonWebToken}",
+                    userId = userState.idUser
+                ).body()
+                if (response != null) {
+                    addSubscribedEventList(response!!)
+                }
+            } catch (e: Exception) {
+                Log.e("SUBSCRIBED EVENT FETCH", "Error, fetching events (in 'getSubscribedEvents()'): ${e.message}")
+            }
+        }
+    }
+
     fun subscribeToEvent(context: Context, userState: LoggedUser, eventId: Long) {
-        fun subscribeToEvent(userState: LoggedUser, eventId: Long) {
             viewModelScope.launch {
                 try {
                     Log.i("EVENT SUBSCRIPTION", "Event ID: $eventId, User ID: ${userState.idUser}")
@@ -88,10 +138,13 @@ class EventViewModel : ViewModel() {
                 } catch (e: Exception) {
                 }
             }
-        }
     }
 
     fun resetEvents(){
         _eventListFlow.value = emptyList()
+    }
+
+    fun resetSubscribedEvents(){
+        _subscribedEventListFlow.value = emptyList()
     }
 }

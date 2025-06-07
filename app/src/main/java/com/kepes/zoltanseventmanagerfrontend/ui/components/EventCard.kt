@@ -40,6 +40,9 @@ fun EventCard(
     date: String,
     time: String,
     address: String,
+    actionBtnName: String,
+    actionBtnIcon: Int,
+    actionBtnDes: String,
     actionBtn: () -> Unit) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -137,12 +140,12 @@ fun EventCard(
                     onClick = { actionBtn() },
                     icon = {
                         Icon(
-                            painter = painterResource(R.drawable.subscribe_24px),
+                            painter = painterResource(actionBtnIcon),
                             modifier = Modifier.padding(0.dp),
-                            contentDescription = "Log user out of the application."
+                            contentDescription = actionBtnDes
                         )
                     },
-                    text = { Text(text = "subscribe", modifier = Modifier.padding(0.dp)) },
+                    text = { Text(text = actionBtnName, modifier = Modifier.padding(0.dp)) },
                 )
             }
         }
@@ -161,6 +164,6 @@ fun EventCard(
 @Composable
 fun HomeScreenPreview() {
     ZoltansEventManagerFrontendTheme {
-        EventCard("title", "desc_short", "date", "time", "location", actionBtn = { })
+        EventCard("title", "desc_short", "date", "time", "location", "subscribe", R.drawable.subscribe_24px, "subscribe to event", actionBtn = { })
     }
 }
