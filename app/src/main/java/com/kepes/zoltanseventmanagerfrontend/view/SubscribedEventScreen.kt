@@ -2,12 +2,9 @@ package com.kepes.zoltanseventmanagerfrontend.view
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,7 +30,7 @@ fun SubscribedEventScreen(
     TopBar("Subscribed Events", loggedUser.pictureUrl)
 
     if (subscribedEventList.isEmpty())
-        eventViewModel.getSubscribedEvents(loggedUser)
+        eventViewModel.updateSubscribedEventListFlow(loggedUser, context)
     else {
         LazyColumn(
             modifier = Modifier
@@ -53,7 +50,7 @@ fun SubscribedEventScreen(
                     R.drawable.unsubscribe_24px,
                     "unsubscribe from event",
                     actionBtn = {
-                        eventViewModel.subscribeToEvent(
+                        eventViewModel.unsubscribeFromEvent(
                             context = context,
                             userState = loggedUser,
                             eventId = subscribedEventList[index].idEvent

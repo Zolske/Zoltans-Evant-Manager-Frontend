@@ -23,10 +23,12 @@ import kotlinx.coroutines.launch
  */
 class EventViewModel : ViewModel() {
     private val _eventListFlow = MutableStateFlow<List<Event>>(emptyList())
+
     // StateFlow for the list of events, which is observed by the UI
     val eventListFlow: StateFlow<List<Event>> = _eventListFlow
 
     private val _subscribedEventListFlow = MutableStateFlow<List<Event>>(emptyList())
+
     // StateFlow for the list of events, which is observed by the UI
     val subscribedEventListFlow: StateFlow<List<Event>> = _subscribedEventListFlow
 
@@ -75,10 +77,10 @@ class EventViewModel : ViewModel() {
     }
 
     /**
-     * Gets all events from the backend and adds them to the eventListFlow to which the user has
-     * not jet subscribed
+     * Gets all events from the backend to which the user has not subscribed and
+     * updates the 'eventListFlow'.
      */
-    fun getNotSubscribedEvents(userState: LoggedUser, context: Context) {
+    fun updateEventListFlow(userState: LoggedUser, context: Context) {
         viewModelScope.launch {
             try {
                 val response = BackApiObject.retrofitService.getNotSubscribedEvents(
@@ -88,22 +90,18 @@ class EventViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     resetEvents()
                     addEventList(response.body()!!)
-                    resetSubscribedEvents()
-                    getSubscribedEvents(userState)
-                    Toast.makeText(
-                        context,
-                        response.headers()["msg"].toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             } catch (e: Exception) {
-                Log.e("EVENT FETCH", "Error, fetching not subscribed events" +
-                        "(in 'getNotSubscribedEvents()'): ${e.message}")
+                Log.e("UPDATE EVENT", "Error: ${e.message}")
             }
         }
     }
 
-    fun getSubscribedEvents(userState: LoggedUser) {
+    /**
+     * Gets all 'subscribed events' from the backend and
+     * updates the 'subscribedEventListFlow'.
+     */
+    fun updateSubscribedEventListFlow(userState: LoggedUser, context: Context) {
         var response: MutableList<Event>?
         viewModelScope.launch {
             try {
@@ -112,43 +110,80 @@ class EventViewModel : ViewModel() {
                     userId = userState.idUser
                 ).body()
                 if (response != null) {
+                    resetSubscribedEvents()
                     addSubscribedEventList(response!!)
                 }
             } catch (e: Exception) {
-                Log.e("SUBSCRIBED EVENT FETCH", "Error, fetching events (in 'getSubscribedEvents()'): ${e.message}")
+                Log.e("UPDATE SUBSCRIBED EVENT", "Error: ${e.message}")
             }
         }
     }
 
+    /**
+     * Create a new record in the subscription table based of the user-id and event-id.
+     * Update the eventListFlow and the subscribedEventListFlow to trigger recomposition.
+     */
     fun subscribeToEvent(context: Context, userState: LoggedUser, eventId: Long) {
-            viewModelScope.launch {
-                try {
-                    Log.i("EVENT SUBSCRIPTION", "Event ID: $eventId, User ID: ${userState.idUser}")
-                    var response = BackApiObject.retrofitService.subscribeToEvent(
-                        bearerToken = "Bearer ${userState.jsonWebToken}",
-                        request = CreateSubscriptionRequest(
-                            userId = userState.idUser,
-                            eventId = eventId
-                        )
+        viewModelScope.launch {
+            try {
+                var response = BackApiObject.retrofitService.subscribeToEvent(
+                    bearerToken = "Bearer ${userState.jsonWebToken}",
+                    request = CreateSubscriptionRequest(
+                        userId = userState.idUser,
+                        eventId = eventId
                     )
-                    if (response.isSuccessful) {
-                        getNotSubscribedEvents(userState, context)
-                        Toast.makeText(
-                            context,
-                            response.headers()["msg"].toString(),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                } catch (e: Exception) {
+                )
+                if (response.code() == 200) {
+                    // update Event/Subscription lists to trigger recomposition
+                    updateEventListFlow(userState, context)
+                    updateSubscribedEventListFlow(userState, context)
+                    Toast.makeText(
+                        context,
+                        response.headers()["msg"].toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+            } catch (e: Exception) {
+                Log.e("SUBSCRIBE", "Error: ${e.message}")
             }
+        }
     }
 
-    fun resetEvents(){
+    /**
+     * Delete a record from the subscription table based of the user-id and event-id.
+     * Update the eventListFlow and the subscribedEventListFlow to trigger recomposition.
+     */
+    fun unsubscribeFromEvent(context: Context, userState: LoggedUser, eventId: Long) {
+        viewModelScope.launch {
+            try {
+                var response = BackApiObject.retrofitService.unsubscribeFromEvent(
+                    bearerToken = "Bearer ${userState.jsonWebToken}",
+                    request = CreateSubscriptionRequest(
+                        userId = userState.idUser,
+                        eventId = eventId
+                    )
+                )
+                if (response.code() == 200) {
+                    // update Event/Subscription lists to trigger recomposition
+                    updateSubscribedEventListFlow(userState, context)
+                    updateEventListFlow(userState, context)
+                    Toast.makeText(
+                        context,
+                        response.headers()["msg"].toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Log.e("UNSUBSCRIBE", "Error: ${e.message}")
+            }
+        }
+    }
+
+    fun resetEvents() {
         _eventListFlow.value = emptyList()
     }
 
-    fun resetSubscribedEvents(){
+    fun resetSubscribedEvents() {
         _subscribedEventListFlow.value = emptyList()
     }
 }

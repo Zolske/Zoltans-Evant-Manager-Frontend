@@ -8,6 +8,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -60,18 +61,38 @@ interface BackApiInter {
         @Header("user-id") userId: String
     ): Response<MutableList<Event>>
 
+    /**
+     * update the subscription table, add "event-user" record
+     * return only 200 if success
+     */
     @POST("api/subscription/subscribe")
     suspend fun subscribeToEvent(
         @Header("Authorization") bearerToken: String,
         @Body request: CreateSubscriptionRequest
     ): Response<Unit>
 
+    /**
+     * update the subscription table, remove "event-user" record
+     * return only 200 if success
+     */
+    @POST("api/subscription/unsubscribe")
+    suspend fun unsubscribeFromEvent(
+        @Header("Authorization") bearerToken: String,
+        @Body request: CreateSubscriptionRequest
+    ): Response<Unit>
+
+    /**
+     * Get all events to which the user is subscribed
+     */
     @GET("api/subscription/subscribedEvents/{user-id}")
     suspend fun getSubscribedEvents(
         @Header("Authorization") bearerToken: String,
         @Path("user-id") userId: String
     ): Response<MutableList<Event>>
 
+    /**
+     * Get all events to which the user is not subscribed
+     */
     @GET("api/events/all_not_subscribed/{user-id}")
     suspend fun getNotSubscribedEvents(
         @Header("Authorization") bearerToken: String,
