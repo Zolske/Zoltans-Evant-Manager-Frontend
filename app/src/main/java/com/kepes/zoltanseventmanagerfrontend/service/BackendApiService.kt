@@ -12,6 +12,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 // url to the backend server
@@ -98,6 +99,13 @@ interface BackApiInter {
         @Header("Authorization") bearerToken: String,
         @Path("user-id") userId: String
     ): Response<MutableList<Event>>
+
+    @PUT("/api/events/update/{event-Id}")
+    suspend fun updateEvent(
+        @Header("Authorization") bearerToken: String,
+        @Path("event-Id") eventId: Long,
+        @Body request: Event
+    ): Response<Event>
 }
 
 /**

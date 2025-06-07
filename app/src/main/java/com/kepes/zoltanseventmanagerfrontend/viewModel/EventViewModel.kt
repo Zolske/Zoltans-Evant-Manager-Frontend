@@ -179,6 +179,30 @@ class EventViewModel : ViewModel() {
         }
     }
 
+    fun updateEvent(context: Context, userState: LoggedUser, eventId: Long, event: Event) {
+        viewModelScope.launch {
+            try {
+                var response = BackApiObject.retrofitService.updateEvent(
+                    bearerToken = "Bearer ${userState.jsonWebToken}",
+                    eventId = eventId,
+                    request = event
+                )
+                if (response.code() == 200) {
+                    // update Event/Subscription lists to trigger recomposition
+                    updateSubscribedEventListFlow(userState, context)
+                    updateEventListFlow(userState, context)
+                    Toast.makeText(
+                        context,
+                        response.headers()["msg"].toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Log.e("UPDATE EVENT", "Error: ${e.message}")
+            }
+        }
+    }
+
     fun resetEvents() {
         _eventListFlow.value = emptyList()
     }

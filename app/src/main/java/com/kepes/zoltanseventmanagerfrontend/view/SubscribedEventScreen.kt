@@ -41,12 +41,16 @@ fun SubscribedEventScreen(
         ) {
             items(subscribedEventList.size) { index ->
                 EventCard(
-                    subscribedEventList[index].idEvent,
-                    subscribedEventList[index].title,
-                    subscribedEventList[index].descShort,
-                    subscribedEventList[index].date,
-                    subscribedEventList[index].time,
-                    subscribedEventList[index].address,
+                    context = context,
+                    loggedUser = loggedUser,
+                    eventViewModel = eventViewModel,
+                    idEvent = subscribedEventList[index].idEvent,
+                    title = subscribedEventList[index].title,
+                    descShort = subscribedEventList[index].descShort,
+                    desc = subscribedEventList[index].desc,
+                    date = subscribedEventList[index].date,
+                    time = subscribedEventList[index].time,
+                    address = subscribedEventList[index].address,
                     "unsubscribe",
                     R.drawable.unsubscribe_24px,
                     "unsubscribe from event",

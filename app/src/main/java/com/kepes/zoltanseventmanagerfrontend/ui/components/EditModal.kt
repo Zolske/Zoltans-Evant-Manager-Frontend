@@ -1,5 +1,6 @@
 package com.kepes.zoltanseventmanagerfrontend.ui.components
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,6 +43,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.Popup
 import com.kepes.zoltanseventmanagerfrontend.R
+import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
+import com.kepes.zoltanseventmanagerfrontend.model.Event
+import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -49,9 +53,13 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditModal(
+    context: Context,
+    loggedUser: LoggedUser,
+    eventViewModel: EventViewModel,
     idEvent: Long,
     title: String,
     descShort: String,
+    desc: String,
     date: String,
     time: String,
     address: String,
@@ -60,6 +68,7 @@ fun EditModal(
 ) {
     var titleEdit by remember { mutableStateOf(title) }
     var descShortEdit by remember { mutableStateOf(descShort) }
+    var descEdit by remember { mutableStateOf(desc) }
     var timeEdit by remember { mutableStateOf(time.substring(0, 5)) }
     var locationEdit by remember { mutableStateOf(address) }
     var showDatePicker by remember { mutableStateOf(false) }
@@ -99,6 +108,12 @@ fun EditModal(
                     value = descShortEdit,
                     onValueChange = { descShortEdit = it },
                     label = { Text("Short description") },
+                )
+                Spacer(Modifier.size(10.dp))
+                OutlinedTextField(
+                    value = descEdit,
+                    onValueChange = { descEdit = it },
+                    label = { Text("Long description") },
                 )
                 Spacer(Modifier.size(10.dp))
                 // Date Picker
@@ -184,7 +199,15 @@ fun EditModal(
                     ) { Text("Dismiss") }
 
                     Button(
-                        onClick = { }
+                        onClick = {
+                            eventViewModel.updateEvent(
+                                context,
+                                loggedUser,
+                                idEvent,
+                                Event(idEvent, titleEdit, descShortEdit, descEdit, selectedDate, timeEdit, locationEdit, "")
+                            )
+                            onConfirmation()
+                        }
                     ) { Text("update Event") }
                 }
             }

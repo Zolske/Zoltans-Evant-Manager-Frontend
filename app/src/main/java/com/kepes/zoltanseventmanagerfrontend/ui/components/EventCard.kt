@@ -1,5 +1,6 @@
 package com.kepes.zoltanseventmanagerfrontend.ui.components
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,14 +36,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.ui.components.EditModal
+import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 
 
 @Composable
 fun EventCard(
+    context: Context,
+    loggedUser: LoggedUser,
+    eventViewModel: EventViewModel,
     idEvent: Long,
     title: String,
     descShort: String,
+    desc: String,
     date: String,
     time: String,
     address: String,
@@ -172,9 +179,13 @@ fun EventCard(
         when {
             openEditDialog.value -> {
                     EditModal(
+                        context,
+                        loggedUser,
+                        eventViewModel,
                         idEvent = idEvent,
                         title = title,
                         descShort = descShort,
+                        desc = desc,
                         date = date,
                         time = time,
                         address = address,
@@ -197,10 +208,11 @@ fun EventCard(
         }*/
 
 
+/*
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     ZoltansEventManagerFrontendTheme {
         EventCard(1234, "title", "desc_short", "date", "time", "location", "subscribe", R.drawable.subscribe_24px, "subscribe to event", actionBtn = { })
     }
-}
+}*/

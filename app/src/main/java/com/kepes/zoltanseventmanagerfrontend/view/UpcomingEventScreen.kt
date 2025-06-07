@@ -42,12 +42,16 @@ fun UpcomingEventScreen(
             else {
             items(eventList.size) { index ->
                 EventCard(
-                    eventList[index].idEvent,
-                    eventList[index].title,
-                    eventList[index].descShort,
-                    eventList[index].date,
-                    eventList[index].time,
-                    eventList[index].address,
+                    context = context,
+                    loggedUser = loggedUser,
+                    eventViewModel = eventViewModel,
+                    idEvent = eventList[index].idEvent,
+                    title = eventList[index].title,
+                    descShort = eventList[index].descShort,
+                    desc = eventList[index].desc,
+                    date = eventList[index].date,
+                    time = eventList[index].time,
+                    address = eventList[index].address,
                     "subscribe",
                     R.drawable.subscribe_24px,
                     "subscribe to event",
