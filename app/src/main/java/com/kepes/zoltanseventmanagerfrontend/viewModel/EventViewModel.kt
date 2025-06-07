@@ -203,6 +203,26 @@ class EventViewModel : ViewModel() {
         }
     }
 
+    fun deleteEvent(context: Context, userState: LoggedUser, eventId: Long) {
+        viewModelScope.launch {
+            try {
+                BackApiObject.retrofitService.deleteEvent(
+                    bearerToken = "Bearer ${userState.jsonWebToken}",
+                    eventId = eventId,
+                )
+                updateSubscribedEventListFlow(userState, context)
+                updateEventListFlow(userState, context)
+                Toast.makeText(
+                    context,
+                    "Event deleted".toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } catch (e: Exception) {
+                Log.e("DELETE EVENT", "Error: ${e.message}")
+            }
+        }
+    }
+
     fun resetEvents() {
         _eventListFlow.value = emptyList()
     }

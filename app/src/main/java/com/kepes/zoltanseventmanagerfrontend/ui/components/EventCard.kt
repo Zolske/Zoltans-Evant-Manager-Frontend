@@ -152,6 +152,18 @@ fun EventCard(
             ) {
                 ExtendedFloatingActionButton(
                     modifier = Modifier.padding(2.dp).height(20.dp),
+                    onClick = { eventViewModel.deleteEvent(context, loggedUser, idEvent) },
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.delete_24px),
+                            modifier = Modifier.padding(0.dp),
+                            contentDescription = "Delete event"
+                        )
+                    },
+                    text = { Text(text = "Delete", modifier = Modifier.padding(0.dp)) },
+                )
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.padding(2.dp).height(20.dp),
                     onClick = { openEditDialog.value = true },
                     icon = {
                         Icon(

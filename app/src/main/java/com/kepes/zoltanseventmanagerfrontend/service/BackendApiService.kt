@@ -106,6 +106,13 @@ interface BackApiInter {
         @Path("event-Id") eventId: Long,
         @Body request: Event
     ): Response<Event>
+
+    // Do not use response form "delete" request.
+    @DELETE("/api/events/delete/{event-Id}")
+    suspend fun deleteEvent(
+        @Header("Authorization") bearerToken: String,
+        @Path("event-Id") eventId: Long,
+    ): Response<Unit>
 }
 
 /**
