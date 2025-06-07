@@ -1,5 +1,6 @@
 package com.kepes.zoltanseventmanagerfrontend.ui.components
 
+import android.R.attr.start
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
@@ -82,15 +85,30 @@ fun EditModal(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(5.dp),
+                .padding(1.dp),
             shape = RoundedCornerShape(16.dp),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(5.dp),
+                    .padding(1.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                if (showTimePicker) {
+                    DialInputTime(
+                        time = timeEdit,
+                        onConfirm = { hour, minute ->
+                            // Handle confirmed time here
+                            timeEdit = "$hour:$minute"
+                            showTimePicker = false
+                        },
+                        onDismiss = {
+                            // Just hide the picker
+                            showTimePicker = false
+                        }
+                    )
+                }
+                Spacer(Modifier.size(10.dp))
                 Text(
                     text = "Edit Event:",
                     fontSize = 20.sp,
@@ -136,18 +154,23 @@ fun EditModal(
                         onDismissRequest = { showDatePicker = false },
                         alignment = Alignment.TopStart
                     ) {
-                        Box(
+                        Column(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxSize()
                                 .offset(y = 64.dp)
                                 .shadow(elevation = 4.dp)
                                 .background(MaterialTheme.colorScheme.surface)
-                                .padding(16.dp)
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             DatePicker(
                                 state = datePickerState,
                                 showModeToggle = false
                             )
+                            Spacer(Modifier.size(10.dp))
+                            Button(
+                                onClick = { showDatePicker = !showDatePicker },
+                            ) { Text("Confirm") }
                         }
                     }
                 }
@@ -166,22 +189,6 @@ fun EditModal(
                         }
                     },
                 )
-                if (showTimePicker) {
-                    DialInputTime(
-                        time = timeEdit,
-                        onConfirm = { hour, minute ->
-                            // Handle confirmed time here
-                            timeEdit = "$hour:$minute"
-                            showTimePicker = false
-                        },
-                        onDismiss = {
-                            // Just hide the picker
-                            showTimePicker = false
-                        }
-                    )
-                }
-
-
                 Spacer(Modifier.size(10.dp))
                 OutlinedTextField(
                     value = locationEdit,
@@ -204,7 +211,16 @@ fun EditModal(
                                 context,
                                 loggedUser,
                                 idEvent,
-                                Event(idEvent, titleEdit, descShortEdit, descEdit, selectedDate, timeEdit, locationEdit, "")
+                                Event(
+                                    idEvent,
+                                    titleEdit,
+                                    descShortEdit,
+                                    descEdit,
+                                    selectedDate,
+                                    timeEdit,
+                                    locationEdit,
+                                    ""
+                                )
                             )
                             onConfirmation()
                         }
@@ -216,7 +232,7 @@ fun EditModal(
 }
 
 fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return formatter.format(Date(millis))
 }
 
@@ -234,10 +250,15 @@ fun DialInputTime(
     )
 
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        TimePicker(state = timePickerState)
+        TimePicker(
+            state = timePickerState,
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 2.dp)
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth(),
