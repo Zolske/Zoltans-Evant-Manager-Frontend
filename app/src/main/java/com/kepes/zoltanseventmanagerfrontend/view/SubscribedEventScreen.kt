@@ -41,6 +41,7 @@ fun SubscribedEventScreen(
         ) {
             items(subscribedEventList.size) { index ->
                 EventCard(
+                    subscribedEventList[index].idEvent,
                     subscribedEventList[index].title,
                     subscribedEventList[index].descShort,
                     subscribedEventList[index].date,

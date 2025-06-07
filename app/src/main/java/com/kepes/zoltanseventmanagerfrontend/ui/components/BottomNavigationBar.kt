@@ -68,13 +68,13 @@ fun BottomNavigationBar(navController: NavController, loggedUserViewModel: Logge
             title = "Create\n Event",
             icon = ImageVector.vectorResource(R.drawable.draw_24px),
             route = Screen.SubscribedEvents.rout,
-            isEnabled = loggedUser.isLoggedIn
+            isEnabled = loggedUser.isLoggedIn && loggedUser.isAdmin
         ),
         NavigationItem(
             title = "Admin",
             icon = ImageVector.vectorResource(R.drawable.manage_accounts_24px),
             route = Screen.SubscribedEvents.rout,
-            isEnabled = loggedUser.isLoggedIn
+            isEnabled = loggedUser.isLoggedIn && loggedUser.isRootAdmin
         ),
     )
 

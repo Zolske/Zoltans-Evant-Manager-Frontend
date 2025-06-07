@@ -25,16 +25,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.kepes.zoltanseventmanagerfrontend.ui.components.EditModal
 
 
 @Composable
 fun EventCard(
+    idEvent: Long,
     title: String,
     descShort: String,
     date: String,
@@ -50,6 +56,8 @@ fun EventCard(
         colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceDim)
     ) {
+        val openEditDialog = remember { mutableStateOf(false) }
+
         Column(
             modifier = Modifier.height(100.dp)
         ) {
@@ -136,7 +144,19 @@ fun EventCard(
                 horizontalArrangement = Arrangement.Center,
             ) {
                 ExtendedFloatingActionButton(
-                    modifier = Modifier.padding(0.dp).height(20.dp),
+                    modifier = Modifier.padding(2.dp).height(20.dp),
+                    onClick = { openEditDialog.value = true },
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.edit_note_24px),
+                            modifier = Modifier.padding(0.dp),
+                            contentDescription = "Edit event"
+                        )
+                    },
+                    text = { Text(text = "Edit", modifier = Modifier.padding(0.dp)) },
+                )
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.padding(2.dp).height(20.dp),
                     onClick = { actionBtn() },
                     icon = {
                         Icon(
@@ -149,8 +169,25 @@ fun EventCard(
                 )
             }
         }
+        when {
+            openEditDialog.value -> {
+                    EditModal(
+                        idEvent = idEvent,
+                        title = title,
+                        descShort = descShort,
+                        date = date,
+                        time = time,
+                        address = address,
+                        onDismissRequest = { openEditDialog.value = false },
+                        onConfirmation = {
+                            openEditDialog.value = false
+                            println("Confirmation registered") // Add logic here to handle confirmation.
+                        }
+                    )
+                }
+            }
+        }
     }
-}
 /*        {
             Icon(
                 painter = painterResource(R.drawable.subscribe_24px),
@@ -164,6 +201,6 @@ fun EventCard(
 @Composable
 fun HomeScreenPreview() {
     ZoltansEventManagerFrontendTheme {
-        EventCard("title", "desc_short", "date", "time", "location", "subscribe", R.drawable.subscribe_24px, "subscribe to event", actionBtn = { })
+        EventCard(1234, "title", "desc_short", "date", "time", "location", "subscribe", R.drawable.subscribe_24px, "subscribe to event", actionBtn = { })
     }
 }

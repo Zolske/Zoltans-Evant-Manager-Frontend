@@ -10,5 +10,9 @@ data class User(
     val name: String,
     val email: String,
     @SerialName(value = "picture_url")
-    val pictureUrl: String
+    val pictureUrl: String,
+    @SerialName(value = "is_admin")
+    val isAdmin: Boolean,
+    @SerialName(value = "is_root_admin")
+    val isRootAdmin: Boolean
 )
