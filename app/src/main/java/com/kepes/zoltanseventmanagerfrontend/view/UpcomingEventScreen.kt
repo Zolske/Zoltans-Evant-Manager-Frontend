@@ -61,6 +61,8 @@ fun UpcomingEventScreen(
                             userState = loggedUser,
                             eventId = eventList[index].idEvent
                         )
+/*                        eventViewModel.resetEvents()
+                        eventViewModel.getNotSubscribedEvents(loggedUser, context)*/
                     })
             }
 

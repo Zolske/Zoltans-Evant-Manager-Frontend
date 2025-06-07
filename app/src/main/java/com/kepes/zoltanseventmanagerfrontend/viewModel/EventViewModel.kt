@@ -86,7 +86,10 @@ class EventViewModel : ViewModel() {
                     userId = userState.idUser
                 )
                 if (response.isSuccessful) {
+                    resetEvents()
                     addEventList(response.body()!!)
+                    resetSubscribedEvents()
+                    getSubscribedEvents(userState)
                     Toast.makeText(
                         context,
                         response.headers()["msg"].toString(),
@@ -129,6 +132,7 @@ class EventViewModel : ViewModel() {
                         )
                     )
                     if (response.isSuccessful) {
+                        getNotSubscribedEvents(userState, context)
                         Toast.makeText(
                             context,
                             response.headers()["msg"].toString(),
