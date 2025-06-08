@@ -12,7 +12,7 @@ package com.kepes.zoltanseventmanagerfrontend.data
  */
 class CalDateTime(startDate: String, startTime: String, durationHour: Int) {
     val startYear: Int = startDate.substring(0, 4).toInt()
-    val startMonth: Int = startDate.substring(5, 7).toInt()
+    val startMonth: Int = startDate.substring(5, 7).toInt() - 1 // Month is 0-based in Calendar
     val startDay: Int = startDate.substring(8, 10).toInt()
     val startHour: Int = startTime.substring(0, 2).toInt()
     val startMinute: Int = startTime.substring(3, 5).toInt()
