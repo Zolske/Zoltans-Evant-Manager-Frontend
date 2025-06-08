@@ -131,6 +131,12 @@ interface BackApiInter {
         @Header("Authorization") bearerToken: String,
         @Header("user-id") userId: String
     ): Response<Unit>
+
+    @POST("/api/user/create")
+    suspend fun createUser(
+        @Header("Authorization") bearerToken: String,
+        @Body request: User
+    ): Response<Unit>
 }
 
 /**
