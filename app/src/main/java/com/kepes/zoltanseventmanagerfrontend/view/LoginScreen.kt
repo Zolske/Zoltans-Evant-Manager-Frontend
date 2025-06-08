@@ -1,8 +1,6 @@
 package com.kepes.zoltanseventmanagerfrontend.view
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,8 +22,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
 import androidx.navigation.NavHostController
-import com.kepes.zoltanseventmanagerfrontend.data.Screen
 import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
+import com.kepes.zoltanseventmanagerfrontend.ui.components.adminSignIn
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState
@@ -37,6 +34,7 @@ import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.LoggedIn
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.NotLoggedIn
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.SignUp
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
+import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
 
 @Composable
 fun LoginScreen(
@@ -44,6 +42,7 @@ fun LoginScreen(
     eventViewModel: EventViewModel,
     loginViewModel: LoginViewModel,
     loginUiState: LoginUiState,
+    userViewModel: UserViewModel,
     navController: NavHostController,
     showAdmin: MutableState<Boolean>
 ) {
@@ -115,7 +114,7 @@ fun LoginScreen(
                 }
 
             Spacer(modifier = Modifier.height(100.dp))
-            adminSignIn(loggedUserViewModel, context, showAdmin)
+            adminSignIn(loggedUserViewModel, context, userViewModel,  showAdmin)
         }
     }
 }

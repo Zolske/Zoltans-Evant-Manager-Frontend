@@ -76,9 +76,10 @@ fun BottomNavigationBar(navController: NavController, loggedUserViewModel: Logge
         NavigationItem(
             title = "Admin",
             icon = ImageVector.vectorResource(R.drawable.manage_accounts_24px),
-            route = Screen.SubscribedEvents.rout,
+            route = Screen.Admin.rout,
             isEnabled = true,
-            isVisible = loggedUser.isLoggedIn && loggedUser.isRootAdmin
+    /*        isVisible = loggedUser.isLoggedIn && loggedUser.isRootAdmin*/
+            isVisible = true // for testing only
         ),
     )
 

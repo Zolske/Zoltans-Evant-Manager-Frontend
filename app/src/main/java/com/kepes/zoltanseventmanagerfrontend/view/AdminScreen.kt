@@ -1,115 +1,114 @@
 package com.kepes.zoltanseventmanagerfrontend.view
 
 import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
+import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
+import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalFocusManager
-import com.kepes.zoltanseventmanagerfrontend.BuildConfig
-import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
-import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
 
 
 @Composable
-fun adminSignIn(loggedUserViewModel: LoggedUserViewModel, context: Context, showAdmin: MutableState<Boolean>) {
-    var password by remember { mutableStateOf("") }
-    val ROOT_ADMIN_PASSWORD = BuildConfig.ROOT_ADMIN_PASSWORD
+fun AdminScreen(
+    userViewModel: UserViewModel,
+    loggedUserViewModel: LoggedUserViewModel,
+    context: Context
+) {
+    val userListFlow by userViewModel.userListFlow.collectAsState()
     val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
-    val isRootAdmin = remember  { mutableStateOf(false) }
+    val showAdmin = remember { mutableStateOf(false) }
+    val showUsers = remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
-    )
-    {
-        if (isRootAdmin.value)
-            Text("You are logged in as Root Admin")
-        else {
-            Text("Root Admin Login")
-            PasswordField(
-                password = password,
-                onPasswordChange = { password = it }
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            if (isRootAdmin.value){
-                loggedUser.isRootAdmin = false
-                isRootAdmin.value = false
-                showAdmin.value = false
-            }
-            else {
-                if (password == ROOT_ADMIN_PASSWORD) {
-                    loggedUser.isRootAdmin = true
-                    isRootAdmin.value = true
-                    showAdmin.value = true
-                    password = ""
-                } else
-                    Toast.makeText(context, "Wrong password.", Toast.LENGTH_SHORT).show()
-            }
-        }
+    ) {
+        TopBar("Root Admin", loggedUser.pictureUrl)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 20.dp, start = 10.dp, end = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (isRootAdmin.value)
-                Text("Root Admin Logout")
-            else
-                Text("Root Admin Login")
+            //Text("Click the button below to fetch all users.")
+            Button(
+                onClick = {
+                    showUsers.value = userViewModel.updateUserList(loggedUser)
+                    //showUsers.value = !showUsers.value // trigger recomposition
+                })
+            { Text("fetch all users") }
+
+/*            Text(
+                "All app users are listed below, you can \n" +
+                        "promote or demote them as admin with the buttons below."
+            )*/
+
+            if (userListFlow.isEmpty())
+                showUsers.value = userViewModel.updateUserList(loggedUser)
+            if (showUsers.value) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 10.dp, start = 2.dp, end = 2.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    items(userListFlow.size) { index ->
+                        HorizontalDivider(
+                            thickness = 2.dp,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            if (userListFlow[index].pictureUrl.isNotEmpty())
+                                AsyncImage(
+                                    model = userListFlow[index].pictureUrl,
+                                    contentDescription = "user image $showUsers",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .padding(end = 10.dp)
+                                        .size(45.dp)
+                                        .clip(CircleShape)
+                                        .align(Alignment.CenterVertically)
+                                )
+                            Text(userListFlow[index].name)
+                            Spacer(modifier = Modifier.padding(10.dp))
+                            if (userListFlow[index].isAdmin)
+                                Button(
+                                    onClick = { userViewModel.toggleAdminValue(loggedUser, userListFlow[index].idUser, context) })
+                                { Text("demote admin") }
+                            else
+                                Button(
+                                    onClick = { userViewModel.toggleAdminValue(loggedUser, userListFlow[index].idUser, context) })
+                                { Text("promote admin") }
+                        }
+                    }
+                }
+            }
         }
     }
-}
-
-@Composable
-fun PasswordField(
-    password: String,
-    onPasswordChange: (String) -> Unit
-) {
-    var passwordVisible by remember { mutableStateOf(false) }
-
-    OutlinedTextField(
-        value = password,
-        onValueChange = onPasswordChange,
-        label = { Text("Admin Password") },
-        placeholder = { Text("Enter your admin password") },
-        singleLine = true,
-        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        trailingIcon = {
-            val image = if (passwordVisible)
-                Icons.Default.Visibility
-            else
-                Icons.Default.VisibilityOff
-
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                Icon(
-                    imageVector = image,
-                    contentDescription = if (passwordVisible) "Hide password" else "Show password"
-                )
-            }
-        }
-    )
 }

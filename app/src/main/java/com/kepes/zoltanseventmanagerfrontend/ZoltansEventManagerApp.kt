@@ -19,12 +19,14 @@ import androidx.navigation.createGraph
 import com.kepes.zoltanseventmanagerfrontend.data.Screen
 //import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomAppBarExample
 import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomNavigationBar
+import com.kepes.zoltanseventmanagerfrontend.view.AdminScreen
 import com.kepes.zoltanseventmanagerfrontend.view.CreateEventScreen
 //import com.kepes.zoltanseventmanagerfrontend.ui.components.UpcomingEventScreen
 import com.kepes.zoltanseventmanagerfrontend.view.SubscribedEventScreen
 import com.kepes.zoltanseventmanagerfrontend.view.UpcomingEventScreen
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
+import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
 
 /**
  * enum values that represent the screens in the app
@@ -43,6 +45,7 @@ fun ZoltansEventManagerApp(
     val loginViewModel: LoginViewModel = viewModel()
     val eventViewModel: EventViewModel = viewModel()
     val loggedUserViewModel: LoggedUserViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
     val showAdmin = remember { mutableStateOf(false) }
     //var userState by remember { mutableStateOf(LoggedUser()) }
 
@@ -57,6 +60,7 @@ fun ZoltansEventManagerApp(
                     eventViewModel,
                     loginViewModel,
                     loginViewModel.loginUiState,
+                    userViewModel,
                     navController,
                     showAdmin
                 )
@@ -69,6 +73,9 @@ fun ZoltansEventManagerApp(
             }
             composable(route = Screen.CreateEvent.rout) {
                 CreateEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
+            }
+            composable(route = Screen.Admin.rout) {
+                AdminScreen(userViewModel, loggedUserViewModel, LocalContext.current)
             }
         }
 

@@ -66,13 +66,11 @@ fun CreateEventScreen(
 ) {
     val subscribedEventList by eventViewModel.subscribedEventListFlow.collectAsState()
     val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
-
     var titleEdit by remember { mutableStateOf("") }
     var descShortEdit by remember { mutableStateOf("") }
     var descEdit by remember { mutableStateOf("") }
     var timeEdit by remember { mutableStateOf("00:00") }
     var locationEdit by remember { mutableStateOf("") }
-
     var showTimePicker by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()

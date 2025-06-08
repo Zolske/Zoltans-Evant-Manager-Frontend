@@ -1,10 +1,18 @@
 package com.kepes.zoltanseventmanagerfrontend.viewModel
 
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
+import com.kepes.zoltanseventmanagerfrontend.model.User
+import com.kepes.zoltanseventmanagerfrontend.service.BackApiObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class LoggedUserViewModel : ViewModel() {
     private val _loggedUserFlow = MutableStateFlow<LoggedUser>(LoggedUser())
@@ -61,4 +69,5 @@ class LoggedUserViewModel : ViewModel() {
     fun resetLoggedUser() {
         _loggedUserFlow.value = LoggedUser()
     }
+
 }

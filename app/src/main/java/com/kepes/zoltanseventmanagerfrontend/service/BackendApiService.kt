@@ -119,6 +119,18 @@ interface BackApiInter {
         @Header("Authorization") bearerToken: String,
         @Body request: Event
     ): Response<Event>
+
+    @GET("api/user/get/get_all_users")
+    suspend fun getAllUsers(
+        @Header("Authorization") bearerToken: String,
+    ): Response<MutableList<User>>
+
+   /* @GET("api/user/toggle_admin/{user-id}")*/
+   @GET("api/user/toggle_admin")
+    suspend fun toggleAdmin(
+        @Header("Authorization") bearerToken: String,
+        @Header("user-id") userId: String
+    ): Response<Unit>
 }
 
 /**
