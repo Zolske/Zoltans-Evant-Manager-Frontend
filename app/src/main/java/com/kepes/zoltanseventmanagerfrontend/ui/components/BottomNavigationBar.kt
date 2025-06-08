@@ -31,10 +31,11 @@ import androidx.compose.ui.unit.dp
 import com.kepes.zoltanseventmanagerfrontend.R
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
+import androidx.compose.runtime.MutableState
 
 
 @Composable
-fun BottomNavigationBar(navController: NavController, loggedUserViewModel: LoggedUserViewModel) {
+fun BottomNavigationBar(navController: NavController, loggedUserViewModel: LoggedUserViewModel, showAdmin: MutableState<Boolean>) {
     val selectedNavigationIndex = rememberSaveable { mutableIntStateOf(0) }
     val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
     val navigationItems = listOf(
@@ -70,12 +71,13 @@ fun BottomNavigationBar(navController: NavController, loggedUserViewModel: Logge
             route = Screen.CreateEvent.rout,
             isEnabled = loggedUser.isLoggedIn && loggedUser.isAdmin,
             isVisible = loggedUser.isLoggedIn && loggedUser.isAdmin,
+/*            isVisible = true*/
         ),
         NavigationItem(
             title = "Admin",
             icon = ImageVector.vectorResource(R.drawable.manage_accounts_24px),
             route = Screen.SubscribedEvents.rout,
-            isEnabled = loggedUser.isLoggedIn && loggedUser.isRootAdmin,
+            isEnabled = true,
             isVisible = loggedUser.isLoggedIn && loggedUser.isRootAdmin
         ),
     )
@@ -86,7 +88,7 @@ fun BottomNavigationBar(navController: NavController, loggedUserViewModel: Logge
         Log.i("BottomNavigationBar", "is user logged in: ${loggedUser.isLoggedIn}")
         navigationItems.forEachIndexed { index, item ->
             // only that are set to visible (e.g. not admin, create, only login or logout)
-            if (item.isVisible) {
+            if (item.isVisible || (showAdmin.value && item.title == "Admin")) {
                 NavigationBarItem(
                     selected = selectedNavigationIndex.intValue == index,
                     onClick = {

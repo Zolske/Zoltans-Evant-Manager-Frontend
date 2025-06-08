@@ -23,6 +23,7 @@ android {
         secretKeys.load(project.rootProject.file("local.properties").inputStream())
         buildConfigField("String", "WEB_CLIENT_ID", secretKeys.getProperty("WEB_CLIENT_ID"))
         buildConfigField("String", "BASE_URL_BACKEND", secretKeys.getProperty("BASE_URL_BACKEND"))
+        buildConfigField("String", "ROOT_ADMIN_PASSWORD", secretKeys.getProperty("ROOT_ADMIN_PASSWORD"))
     }
 
     buildTypes {
@@ -89,5 +90,7 @@ dependencies {
     // Image loading Coil
     implementation(libs.coil3.coil.compose)
     implementation(libs.coil.network.okhttp)
+    // Icons
+    implementation(libs.material.icons.extended)
 
 }

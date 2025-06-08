@@ -3,6 +3,8 @@ package com.kepes.zoltanseventmanagerfrontend
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import  androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kepes.zoltanseventmanagerfrontend.view.LoginScreen
@@ -41,10 +43,11 @@ fun ZoltansEventManagerApp(
     val loginViewModel: LoginViewModel = viewModel()
     val eventViewModel: EventViewModel = viewModel()
     val loggedUserViewModel: LoggedUserViewModel = viewModel()
+    val showAdmin = remember { mutableStateOf(false) }
     //var userState by remember { mutableStateOf(LoggedUser()) }
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController, loggedUserViewModel) }
+        bottomBar = { BottomNavigationBar(navController, loggedUserViewModel, showAdmin) }
     ) { innerPadding ->
 
         val graph = navController.createGraph(startDestination = Screen.Login.rout) {
@@ -54,7 +57,8 @@ fun ZoltansEventManagerApp(
                     eventViewModel,
                     loginViewModel,
                     loginViewModel.loginUiState,
-                    navController
+                    navController,
+                    showAdmin
                 )
             }
             composable(route = Screen.UpcomingEvents.rout) {
