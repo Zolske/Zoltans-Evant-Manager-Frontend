@@ -35,7 +35,7 @@ import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 
 @Composable
 fun BottomNavigationBar(navController: NavController, loggedUserViewModel: LoggedUserViewModel) {
-    val selectedNavigationIndex = rememberSaveable {mutableIntStateOf(0)}
+    val selectedNavigationIndex = rememberSaveable { mutableIntStateOf(0) }
     val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
     val navigationItems = listOf(
         NavigationItem(
@@ -67,14 +67,16 @@ fun BottomNavigationBar(navController: NavController, loggedUserViewModel: Logge
         NavigationItem(
             title = "Create\n Event",
             icon = ImageVector.vectorResource(R.drawable.draw_24px),
-            route = Screen.SubscribedEvents.rout,
-            isEnabled = loggedUser.isLoggedIn && loggedUser.isAdmin
+            route = Screen.CreateEvent.rout,
+            isEnabled = loggedUser.isLoggedIn && loggedUser.isAdmin,
+            isVisible = loggedUser.isLoggedIn && loggedUser.isAdmin,
         ),
         NavigationItem(
             title = "Admin",
             icon = ImageVector.vectorResource(R.drawable.manage_accounts_24px),
             route = Screen.SubscribedEvents.rout,
-            isEnabled = loggedUser.isLoggedIn && loggedUser.isRootAdmin
+            isEnabled = loggedUser.isLoggedIn && loggedUser.isRootAdmin,
+            isVisible = loggedUser.isLoggedIn && loggedUser.isRootAdmin
         ),
     )
 
@@ -100,10 +102,10 @@ fun BottomNavigationBar(navController: NavController, loggedUserViewModel: Logge
                         Text(
                             item.title,
                             color = if (index == selectedNavigationIndex.intValue)
-                                        Color.Black
-                                    else if (item.isEnabled == false)
-                                        Color.Gray.copy(alpha = 0.4f)
-                                    else Color.Gray
+                                Color.Black
+                            else if (item.isEnabled == false)
+                                Color.Gray.copy(alpha = 0.4f)
+                            else Color.Gray
                         )
                     },
                     colors = NavigationBarItemDefaults.colors(

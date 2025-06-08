@@ -139,6 +139,9 @@ class LoginViewModel : ViewModel() {
             loggedUser.email = response.body()!!.email
             loggedUser.hasAccount = true
             loggedUser.isLoggedIn = true
+            loggedUser.isAdmin = response.body()!!.isAdmin
+            loggedUser.isRootAdmin = response.body()!!.isRootAdmin
+            Log.i("USER AUTH", "logged user is admin: ${loggedUser.isAdmin}")
             loginUiState = LoginUiState.LoggedIn("Received user data from the Server.")
             return true
         }
@@ -167,6 +170,10 @@ class LoginViewModel : ViewModel() {
                     changeToScreen()*/
             } catch (e: Exception) {}
         }
+    }
+
+    fun resetLoginUiState() {
+        loginUiState = LoginUiState.NotLoggedIn("You are not logged in.")
     }
 
 }

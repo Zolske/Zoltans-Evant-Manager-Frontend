@@ -113,6 +113,12 @@ interface BackApiInter {
         @Header("Authorization") bearerToken: String,
         @Path("event-Id") eventId: Long,
     ): Response<Unit>
+
+    @POST("/api/events/create")
+    suspend fun createEvent(
+        @Header("Authorization") bearerToken: String,
+        @Body request: Event
+    ): Response<Event>
 }
 
 /**

@@ -17,17 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.kepes.zoltanseventmanagerfrontend.ui.theme.ZoltansEventManagerFrontendTheme
 import com.kepes.zoltanseventmanagerfrontend.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.kepes.zoltanseventmanagerfrontend.data.CalDateTime
 import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
-import com.kepes.zoltanseventmanagerfrontend.ui.components.EditModal
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
+import com.kepes.zoltanseventmanagerfrontend.viewModel.addCalendarEvent
 
 
 @Composable
@@ -57,9 +54,15 @@ fun EventCard(
     actionBtnIcon: Int,
     actionBtnDes: String,
     actionBtn: () -> Unit) {
+
+
+    var cardSize: Modifier = Modifier.padding(6.dp).height(155.dp).fillMaxWidth()
+    if( loggedUser.isAdmin || loggedUser.isRootAdmin)
+        cardSize = Modifier.padding(6.dp).height(180.dp).fillMaxWidth()
+
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        modifier = Modifier.padding(6.dp).height(155.dp).fillMaxWidth(),
+        modifier = cardSize,
         colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceDim)
     ) {
@@ -96,6 +99,37 @@ fun EventCard(
         }
         HorizontalDivider(thickness = 2.dp)
         Column {
+            if (loggedUser.isAdmin || loggedUser.isRootAdmin) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    ExtendedFloatingActionButton(
+                        modifier = Modifier.padding(2.dp).height(20.dp),
+                        onClick = { eventViewModel.deleteEvent(context, loggedUser, idEvent) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.delete_24px),
+                                modifier = Modifier.padding(0.dp),
+                                contentDescription = "Delete event"
+                            )
+                        },
+                        text = { Text(text = "Delete", modifier = Modifier.padding(0.dp)) },
+                    )
+                    ExtendedFloatingActionButton(
+                        modifier = Modifier.padding(2.dp).height(20.dp),
+                        onClick = { openEditDialog.value = true },
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.edit_note_24px),
+                                modifier = Modifier.padding(0.dp),
+                                contentDescription = "Edit event"
+                            )
+                        },
+                        text = { Text(text = "Edit", modifier = Modifier.padding(0.dp)) },
+                    )
+                }
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -143,36 +177,25 @@ fun EventCard(
                         textAlign = TextAlign.Center,
                     )
                 }
-
-
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 ExtendedFloatingActionButton(
                     modifier = Modifier.padding(2.dp).height(20.dp),
-                    onClick = { eventViewModel.deleteEvent(context, loggedUser, idEvent) },
+                    onClick = {
+                        val ctd = CalDateTime(date, time, 1)
+                        addCalendarEvent(context, title, address, descShort, ctd)
+                    },
                     icon = {
                         Icon(
-                            painter = painterResource(R.drawable.delete_24px),
+                            painter = painterResource(R.drawable.calendar_add_on_24px),
                             modifier = Modifier.padding(0.dp),
-                            contentDescription = "Delete event"
+                            contentDescription = "Add event to google calendar."
                         )
                     },
-                    text = { Text(text = "Delete", modifier = Modifier.padding(0.dp)) },
-                )
-                ExtendedFloatingActionButton(
-                    modifier = Modifier.padding(2.dp).height(20.dp),
-                    onClick = { openEditDialog.value = true },
-                    icon = {
-                        Icon(
-                            painter = painterResource(R.drawable.edit_note_24px),
-                            modifier = Modifier.padding(0.dp),
-                            contentDescription = "Edit event"
-                        )
-                    },
-                    text = { Text(text = "Edit", modifier = Modifier.padding(0.dp)) },
+                    text = { Text(text = "calendar", modifier = Modifier.padding(0.dp)) },
                 )
                 ExtendedFloatingActionButton(
                     modifier = Modifier.padding(2.dp).height(20.dp),

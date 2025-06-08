@@ -223,6 +223,29 @@ class EventViewModel : ViewModel() {
         }
     }
 
+    fun createEvent(context: Context, userState: LoggedUser, event: Event) {
+        viewModelScope.launch {
+            try {
+                var response = BackApiObject.retrofitService.createEvent(
+                    bearerToken = "Bearer ${userState.jsonWebToken}",
+                    request = event
+                )
+                if (response.code() == 200) {
+                    // update Event/Subscription lists to trigger recomposition
+                    updateSubscribedEventListFlow(userState, context)
+                    updateEventListFlow(userState, context)
+                    Toast.makeText(
+                        context,
+                        response.headers()["msg"].toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Log.e("CREATE EVENT", "Error: ${e.message}")
+            }
+        }
+    }
+
     fun resetEvents() {
         _eventListFlow.value = emptyList()
     }

@@ -2,7 +2,7 @@ package com.kepes.zoltanseventmanagerfrontend
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import  androidx. compose. runtime. Composable
+import  androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kepes.zoltanseventmanagerfrontend.view.LoginScreen
@@ -17,6 +17,7 @@ import androidx.navigation.createGraph
 import com.kepes.zoltanseventmanagerfrontend.data.Screen
 //import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomAppBarExample
 import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomNavigationBar
+import com.kepes.zoltanseventmanagerfrontend.view.CreateEventScreen
 //import com.kepes.zoltanseventmanagerfrontend.ui.components.UpcomingEventScreen
 import com.kepes.zoltanseventmanagerfrontend.view.SubscribedEventScreen
 import com.kepes.zoltanseventmanagerfrontend.view.UpcomingEventScreen
@@ -47,16 +48,25 @@ fun ZoltansEventManagerApp(
     ) { innerPadding ->
 
         val graph = navController.createGraph(startDestination = Screen.Login.rout) {
-                composable(route = Screen.Login.rout) {
-                    LoginScreen(loggedUserViewModel, eventViewModel, loginViewModel, loginViewModel.loginUiState, navController)
-                }
-                composable(route = Screen.UpcomingEvents.rout) {
-                    UpcomingEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
-                }
-                composable(route = Screen.SubscribedEvents.rout) {
-                    SubscribedEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
-                }
+            composable(route = Screen.Login.rout) {
+                LoginScreen(
+                    loggedUserViewModel,
+                    eventViewModel,
+                    loginViewModel,
+                    loginViewModel.loginUiState,
+                    navController
+                )
             }
+            composable(route = Screen.UpcomingEvents.rout) {
+                UpcomingEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
+            }
+            composable(route = Screen.SubscribedEvents.rout) {
+                SubscribedEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
+            }
+            composable(route = Screen.CreateEvent.rout) {
+                CreateEventScreen(eventViewModel, loggedUserViewModel, LocalContext.current)
+            }
+        }
 
         NavHost(
             navController = navController,

@@ -73,6 +73,8 @@ fun LoginScreen(
                 onClick = {
                     loggedUserViewModel.resetLoggedUser()
                     eventViewModel.resetEvents()
+                    eventViewModel.resetSubscribedEvents()
+                    loginViewModel.resetLoginUiState()
                 }) { Text("Logout") }
 
         Spacer(modifier = Modifier.height(100.dp))
