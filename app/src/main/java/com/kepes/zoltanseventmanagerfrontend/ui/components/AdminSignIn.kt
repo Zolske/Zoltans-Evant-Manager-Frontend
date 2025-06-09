@@ -94,7 +94,7 @@ fun PasswordField(
     OutlinedTextField(
         value = password,
         onValueChange = onPasswordChange,
-        label = { Text("Admin Password") },
+        label = { Text("Root Admin Password") },
         placeholder = { Text("Enter your admin password") },
         singleLine = true,
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),

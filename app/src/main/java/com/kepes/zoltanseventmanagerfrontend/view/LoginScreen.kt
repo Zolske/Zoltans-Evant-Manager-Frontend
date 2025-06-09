@@ -1,5 +1,6 @@
 package com.kepes.zoltanseventmanagerfrontend.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,8 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.credentials.CredentialManager
 import androidx.navigation.NavHostController
 import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
@@ -35,6 +40,7 @@ import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.NotLoggedIn
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginUiState.SignUp
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
+import com.kepes.zoltanseventmanagerfrontend.R
 
 @Composable
 fun LoginScreen(
@@ -56,9 +62,6 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .clickable(
-/*                // Dismiss keyboard when clicking outside
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }*/
             ) {
                 focusManager.clearFocus()
             }
@@ -76,10 +79,18 @@ fun LoginScreen(
             else
                 TopBar(title = "Login", userUrl = "")
 
-            Spacer(modifier = Modifier.height(100.dp))
+            Spacer(modifier = Modifier.height(40.dp))
+
+            Text("   Welcome to\n      Zoltan's\nEvent Manager",
+                fontFamily = FontFamily.Serif,
+                fontSize = 30.sp,
+                lineHeight = 40.sp)
+
+            Spacer(modifier = Modifier.height(60.dp))
 
             if (loggedUser.isLoggedIn == false) {
                 Text("Sign in or up with your Google account")
+                Spacer(modifier = Modifier.height(10.dp))
                 Button(
                     onClick = {
                         loginViewModel.loginOrSignupUser(
@@ -94,6 +105,7 @@ fun LoginScreen(
             }
             else {
                 Text("Welcome ${loggedUser.name}, nice to have you here.")
+                Spacer(modifier = Modifier.height(10.dp))
                 Button(
                     onClick = {
                         loggedUserViewModel.resetLoggedUser()
@@ -102,6 +114,7 @@ fun LoginScreen(
                         loginViewModel.resetLoginUiState()
                     }) { Text("Logout") }
             }
+            Spacer(modifier = Modifier.height(30.dp))
             if (loggedUser.isLoggedIn == false)
                 when (loginUiState) {
                     is NotLoggedIn -> Text("${loginUiState.eMessage}", fontStyle = FontStyle.Italic)
@@ -114,7 +127,8 @@ fun LoginScreen(
                 }
 
             Spacer(modifier = Modifier.height(100.dp))
-            adminSignIn(loggedUserViewModel, context, userViewModel,  showAdmin)
+            if (loggedUser.isLoggedIn)
+                adminSignIn(loggedUserViewModel, context, userViewModel,  showAdmin)
         }
     }
 }

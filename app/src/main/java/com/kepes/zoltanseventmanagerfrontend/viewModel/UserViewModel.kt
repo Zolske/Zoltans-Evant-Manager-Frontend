@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
     private val _userListFlow = MutableStateFlow<List<User>>(emptyList())
+
     // StateFlow for the list of users, which is observed by the UI
     val userListFlow: StateFlow<List<User>> = _userListFlow
 
@@ -34,8 +35,7 @@ class UserViewModel : ViewModel() {
         //Log.i("usr list", "${_userListFlow.value}")
     }
 
-    fun updateUserList(userState: LoggedUser) : Boolean
-    {
+    fun updateUserList(userState: LoggedUser): Boolean {
         var response: MutableList<User>?
         viewModelScope.launch {
             try {
@@ -54,8 +54,7 @@ class UserViewModel : ViewModel() {
         return true
     }
 
-    fun toggleAdminValue(userState: LoggedUser, idUser: String, context: Context)
-    {
+    fun toggleAdminValue(userState: LoggedUser, idUser: String, context: Context) {
         //Log.i("Toggle admin", "$idUser")
         viewModelScope.launch {
             try {
@@ -63,8 +62,8 @@ class UserViewModel : ViewModel() {
                     bearerToken = "Bearer ${userState.jsonWebToken}",
                     userId = idUser,
                 ).body()
-                    updateUserList(userState)
-                    Toast.makeText(context, "Admin status changed", Toast.LENGTH_SHORT).show()
+                updateUserList(userState)
+                Toast.makeText(context, "Admin status changed", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Log.e("CREATE EVENT", "Error: ${e.message}")
             }
