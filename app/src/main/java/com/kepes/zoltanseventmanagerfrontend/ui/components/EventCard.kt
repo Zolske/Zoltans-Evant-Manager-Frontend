@@ -274,7 +274,7 @@ fun EventCard(
                     onDismissRequest = { openEditDialog.value = false },
                     onConfirmation = {
                         openEditDialog.value = false
-                        println("Confirmation registered") // Add logic here to handle confirmation.
+                        println("Confirmation registered")
                     }
                 )
             }

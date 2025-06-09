@@ -3,7 +3,6 @@ package com.kepes.zoltanseventmanagerfrontend.view
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,9 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
@@ -26,9 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
-import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,11 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.Popup
 import com.kepes.zoltanseventmanagerfrontend.R
 import com.kepes.zoltanseventmanagerfrontend.model.Event
@@ -52,9 +43,6 @@ import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
 import com.kepes.zoltanseventmanagerfrontend.ui.components.convertMillisToDate
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,7 +91,7 @@ fun CreateEventScreen(
                         time = timeEdit,
                         onConfirm = { hour, minute ->
                             // Handle confirmed time here
-                           /* timeEdit = "$hour:$minute"*/
+                            /* timeEdit = "$hour:$minute"*/
                             timeEdit = String.format("%02d:%02d", hour, minute)
                             showTimePicker = false
                         },
@@ -119,7 +107,7 @@ fun CreateEventScreen(
                         onDismissRequest = { showDatePicker = false },
                         alignment = Alignment.TopCenter
                     ) {
-                        Column (
+                        Column(
                             verticalArrangement = Arrangement.Top,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -245,58 +233,3 @@ fun CreateEventScreen(
         }
     }
 }
-
-/*
-    fun convertMillisToDate(millis: Long): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return formatter.format(Date(millis))
-    }
-*/
-
-   /* @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun DialInputTime(
-        time: String,
-        onConfirm: (hour: Int, minute: Int) -> Unit,
-        onDismiss: () -> Unit,
-    ) {
-        val timePickerState = rememberTimePickerState(
-            initialHour = time.substring(0, 2).toInt(),
-            initialMinute = time.substring(3, 5).toInt(),
-            is24Hour = true
-        )
-
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            TimePicker(
-                state = timePickerState,
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 2.dp)
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Button(
-                    onClick = {
-                        onDismiss()
-                    }
-                ) {
-                    Text("Dismiss")
-                }
-
-                Button(
-                    onClick = {
-                        onConfirm(timePickerState.hour, timePickerState.minute)
-                    }
-                ) {
-                    Text("Confirm")
-                }
-            }
-        }
-    }*/

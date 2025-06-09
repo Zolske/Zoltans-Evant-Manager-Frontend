@@ -15,17 +15,17 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
-import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.kepes.zoltanseventmanagerfrontend.ui.components.TopBar
+import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
 
 
@@ -51,18 +51,11 @@ fun AdminScreen(
                 .padding(top = 20.dp, start = 10.dp, end = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            //Text("Click the button below to fetch all users.")
             Button(
                 onClick = {
                     showUsers.value = userViewModel.updateUserList(loggedUser)
-                    //showUsers.value = !showUsers.value // trigger recomposition
                 })
             { Text("fetch all users") }
-
-/*            Text(
-                "All app users are listed below, you can \n" +
-                        "promote or demote them as admin with the buttons below."
-            )*/
 
             if (userListFlow.isEmpty())
                 showUsers.value = userViewModel.updateUserList(loggedUser)
@@ -99,11 +92,23 @@ fun AdminScreen(
                             Spacer(modifier = Modifier.padding(10.dp))
                             if (userListFlow[index].isAdmin)
                                 Button(
-                                    onClick = { userViewModel.toggleAdminValue(loggedUser, userListFlow[index].idUser, context) })
+                                    onClick = {
+                                        userViewModel.toggleAdminValue(
+                                            loggedUser,
+                                            userListFlow[index].idUser,
+                                            context
+                                        )
+                                    })
                                 { Text("demote admin") }
                             else
                                 Button(
-                                    onClick = { userViewModel.toggleAdminValue(loggedUser, userListFlow[index].idUser, context) })
+                                    onClick = {
+                                        userViewModel.toggleAdminValue(
+                                            loggedUser,
+                                            userListFlow[index].idUser,
+                                            context
+                                        )
+                                    })
                                 { Text("promote admin") }
                         }
                     }

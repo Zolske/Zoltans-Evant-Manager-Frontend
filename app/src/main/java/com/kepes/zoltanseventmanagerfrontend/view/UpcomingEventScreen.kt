@@ -8,8 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,16 +28,16 @@ fun UpcomingEventScreen(
     val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
 
     TopBar("Upcoming Events", loggedUser.pictureUrl)
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 100.dp, start = 24.dp, end = 24.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (eventList.isEmpty())
-                eventViewModel.updateEventListFlow(loggedUser, context)
-            else {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 100.dp, start = 24.dp, end = 24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (eventList.isEmpty())
+            eventViewModel.updateEventListFlow(loggedUser, context)
+        else {
             items(eventList.size) { index ->
                 EventCard(
                     context = context,

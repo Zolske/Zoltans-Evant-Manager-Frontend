@@ -1,6 +1,5 @@
 package com.kepes.zoltanseventmanagerfrontend.ui.components
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -12,7 +11,7 @@ fun ConfirmDialog(
     onConfirmation: () -> Unit,
     dialogTitle: String,
     dialogText: String,
-){
+) {
     AlertDialog(
         title = {
             Text(text = dialogTitle)

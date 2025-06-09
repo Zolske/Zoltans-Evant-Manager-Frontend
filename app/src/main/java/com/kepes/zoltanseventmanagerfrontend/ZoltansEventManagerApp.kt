@@ -1,41 +1,32 @@
 package com.kepes.zoltanseventmanagerfrontend
 
+//import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomAppBarExample
+//import com.kepes.zoltanseventmanagerfrontend.ui.components.UpcomingEventScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import  androidx.compose.runtime.Composable
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kepes.zoltanseventmanagerfrontend.view.LoginScreen
-import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.createGraph
 import com.kepes.zoltanseventmanagerfrontend.data.Screen
-//import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomAppBarExample
 import com.kepes.zoltanseventmanagerfrontend.ui.components.BottomNavigationBar
 import com.kepes.zoltanseventmanagerfrontend.view.AdminScreen
 import com.kepes.zoltanseventmanagerfrontend.view.CreateEventScreen
-//import com.kepes.zoltanseventmanagerfrontend.ui.components.UpcomingEventScreen
+import com.kepes.zoltanseventmanagerfrontend.view.LoginScreen
 import com.kepes.zoltanseventmanagerfrontend.view.SubscribedEventScreen
 import com.kepes.zoltanseventmanagerfrontend.view.UpcomingEventScreen
 import com.kepes.zoltanseventmanagerfrontend.viewModel.EventViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
+import com.kepes.zoltanseventmanagerfrontend.viewModel.LoginViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
-
-/**
- * enum values that represent the screens in the app
- */
-/*enum class AppScreens(@StringRes val title: Int) {
-    Login(title = R.string.title_sc_login_signup),
-    Home(title = R.string.title_sc_home),
-    SubscribedEvent(title = R.string.title_subscribed_events)
-}*/
 
 @Preview(showBackground = true)
 @Composable
@@ -47,7 +38,6 @@ fun ZoltansEventManagerApp(
     val loggedUserViewModel: LoggedUserViewModel = viewModel()
     val userViewModel: UserViewModel = viewModel()
     val showAdmin = remember { mutableStateOf(false) }
-    //var userState by remember { mutableStateOf(LoggedUser()) }
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController, loggedUserViewModel, showAdmin) }

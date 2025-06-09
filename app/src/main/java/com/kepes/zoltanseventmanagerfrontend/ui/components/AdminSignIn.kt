@@ -7,25 +7,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import com.kepes.zoltanseventmanagerfrontend.BuildConfig
 import com.kepes.zoltanseventmanagerfrontend.viewModel.LoggedUserViewModel
 import com.kepes.zoltanseventmanagerfrontend.viewModel.UserViewModel
@@ -41,7 +41,7 @@ fun adminSignIn(
     var password by remember { mutableStateOf("") }
     val ROOT_ADMIN_PASSWORD = BuildConfig.ROOT_ADMIN_PASSWORD
     val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
-    val isRootAdmin = remember  { mutableStateOf(false) }
+    val isRootAdmin = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.padding(16.dp),
@@ -59,14 +59,12 @@ fun adminSignIn(
         }
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            if (isRootAdmin.value){
+            if (isRootAdmin.value) {
                 loggedUser.isRootAdmin = false
                 isRootAdmin.value = false
                 showAdmin.value = false
-            }
-            else {
+            } else {
                 if (password == ROOT_ADMIN_PASSWORD) {
-/*                    userViewModel.updateUserList(loggedUser)*/
                     loggedUser.isRootAdmin = true
                     isRootAdmin.value = true
                     showAdmin.value = true

@@ -22,7 +22,6 @@ private const val BASE_URL = BuildConfig.BASE_URL_BACKEND
  * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
  */
 private val retrofit = Retrofit.Builder()
-    //.addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
     .addConverterFactory(GsonConverterFactory.create())
     .baseUrl(BASE_URL)
     .build()
@@ -40,11 +39,7 @@ interface BackApiInter {
     @GET("api/auth")
     suspend fun getAuth(
         @Header("google-id-token") headerGoogleIdToken: String
-        //@Body request: LoginRequest
     ): Response<User>
-
-    // all request (except 'api/auth') need to have
-    // @Header("Authorization") BearerToken: String
 
     /**
      * Get user Data from the backend Server,
@@ -53,7 +48,6 @@ interface BackApiInter {
     suspend fun getUserData(
         @Header("Authorization") bearerToken: String,
         @Header("user-id") userId: String
-        //@Body request: LoginRequest
     ): Response<User>
 
     @GET("api/events/all")
@@ -125,8 +119,7 @@ interface BackApiInter {
         @Header("Authorization") bearerToken: String,
     ): Response<MutableList<User>>
 
-   /* @GET("api/user/toggle_admin/{user-id}")*/
-   @GET("api/user/toggle_admin")
+    @GET("api/user/toggle_admin")
     suspend fun toggleAdmin(
         @Header("Authorization") bearerToken: String,
         @Header("user-id") userId: String

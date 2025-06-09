@@ -21,9 +21,12 @@ fun addCalendarEvent(
         putExtra(CalendarContract.Events.EVENT_LOCATION, location)
         putExtra(CalendarContract.Events.DESCRIPTION, descShort)
 
-        Log.d("Calendar", "Event title: $title, location: $location, descShort: $descShort, cdt: $cdt " +
-                "startYear: ${cdt.startYear}, startMonth: ${cdt.startMonth}, startDay: ${cdt.startDay}" +
-                "startHour: ${cdt.startHour}, startMinute: ${cdt.startMinute}")
+        Log.d(
+            "Calendar",
+            "Event title: $title, location: $location, descShort: $descShort, cdt: $cdt " +
+                    "startYear: ${cdt.startYear}, startMonth: ${cdt.startMonth}, startDay: ${cdt.startDay}" +
+                    "startHour: ${cdt.startHour}, startMinute: ${cdt.startMinute}"
+        )
         // Event time
         val startMillis = Calendar.getInstance().apply {
             set(cdt.startYear, cdt.startMonth, cdt.startDay, cdt.startHour, cdt.startMinute)
@@ -40,6 +43,5 @@ fun addCalendarEvent(
         context.startActivity(intent)
     } catch (e: Exception) {
         Toast.makeText(context, "Google Calendar app not found", Toast.LENGTH_SHORT).show()
-        // Handle the case where Google Calendar is not installed
     }
 }

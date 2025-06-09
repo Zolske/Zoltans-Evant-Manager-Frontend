@@ -10,12 +10,10 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.kepes.zoltanseventmanagerfrontend.BuildConfig
-import com.kepes.zoltanseventmanagerfrontend.data.LoggedUser
 import com.kepes.zoltanseventmanagerfrontend.model.User
 import com.kepes.zoltanseventmanagerfrontend.service.BackApiObject
 import kotlinx.coroutines.launch
@@ -68,7 +66,7 @@ class LoginViewModel : ViewModel() {
                 val googleIdTokenCredential =
                     GoogleIdTokenCredential.createFrom(credential.data)
                 googleIdToken = googleIdTokenCredential.idToken
-                Log.d("GOOGLE AUTH", "Google ID token: $googleIdToken")
+                //Log.d("GOOGLE AUTH", "Google ID token: $googleIdToken") // for debugging
                 LoginUiState.AuthGoogle("Successfully authenticated with Google.")
             } else {
                 Log.e("GOOGLE AUTH", "Google credentials are not valid.")
@@ -170,7 +168,8 @@ class LoginViewModel : ViewModel() {
                     loggedUser.isLoggedIn = true
                     loginUiState = LoginUiState.LoggedIn("User created and logged in.")
                 } else {
-                    loginUiState = LoginUiState.Error("Sorry, something went wrong, please try again.")
+                    loginUiState =
+                        LoginUiState.Error("Sorry, something went wrong, please try again.")
                 }
             } catch (e: Exception) {
                 loginUiState = LoginUiState.Error("Sorry, something went wrong, please try again.")
@@ -183,18 +182,18 @@ class LoginViewModel : ViewModel() {
         loggedUser: LoggedUserViewModel,
         context: Context,
         credentialManager: CredentialManager,
-        //changeToScreen: () -> Unit
     ) {
         viewModelScope.launch {
             try {
                 var googleIdToken = authGoogle(context, credentialManager)
                 var googleUserData = authBackend(loggedUser, googleIdToken)
                 val hasAccount = getUserData(loggedUser)
-                Log.i("JWT", loggedUser.jsonWebToken)
-                Log.i("LOGIN USER", "user has account: ${loggedUser.hasAccount}")
+                // Log.i("JWT", loggedUser.jsonWebToken)                             // for debugging
+                // Log.i("LOGIN USER", "user has account: ${loggedUser.hasAccount}") // for debugging
                 if (hasAccount == false)
                     createUser(loggedUser, googleUserData)
             } catch (e: Exception) {
+                Log.e("LOGIN SIGNUP", "Error: ${e.message}")
             }
         }
     }

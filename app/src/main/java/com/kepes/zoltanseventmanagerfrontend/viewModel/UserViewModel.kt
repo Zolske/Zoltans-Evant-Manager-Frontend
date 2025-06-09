@@ -32,7 +32,6 @@ class UserViewModel : ViewModel() {
         val currentList = _userListFlow.value.toMutableList()
         currentList.addAll(userList)
         _userListFlow.value = currentList.toList()
-        //Log.i("usr list", "${_userListFlow.value}")
     }
 
     fun updateUserList(userState: LoggedUser): Boolean {
@@ -55,7 +54,6 @@ class UserViewModel : ViewModel() {
     }
 
     fun toggleAdminValue(userState: LoggedUser, idUser: String, context: Context) {
-        //Log.i("Toggle admin", "$idUser")
         viewModelScope.launch {
             try {
                 var response = BackApiObject.retrofitService.toggleAdmin(

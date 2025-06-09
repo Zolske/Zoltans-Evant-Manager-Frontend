@@ -23,7 +23,7 @@ fun SubscribedEventScreen(
     eventViewModel: EventViewModel,
     loggedUserViewModel: LoggedUserViewModel,
     context: Context
-){
+) {
     val subscribedEventList by eventViewModel.subscribedEventListFlow.collectAsState()
     val loggedUser by loggedUserViewModel.loggedUserFlow.collectAsState()
 

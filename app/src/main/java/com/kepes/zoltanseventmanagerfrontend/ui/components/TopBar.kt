@@ -29,13 +29,18 @@ fun TopBar(
     userUrl: String
 ){
     Row(
-        modifier = Modifier.fillMaxWidth().padding(10.dp).background(MaterialTheme.colorScheme.inverseOnSurface),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
+            .background(MaterialTheme.colorScheme.inverseOnSurface),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo_no_name_500),
-            modifier = Modifier.size(80.dp).padding(10.dp),
+            modifier = Modifier
+                .size(80.dp)
+                .padding(10.dp),
             contentDescription = "App logo."
         )
         Text(
@@ -56,7 +61,9 @@ fun TopBar(
         else {
             Icon(
                 painter = painterResource(R.drawable.account_circle_24px),
-                modifier = Modifier.padding(end = 10.dp).align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .padding(end = 10.dp)
+                    .align(Alignment.CenterVertically),
                 contentDescription = "Log user out of the application."
             )
         }
