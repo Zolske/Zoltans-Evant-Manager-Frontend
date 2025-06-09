@@ -1,0 +1,13 @@
+# Pass the values for the keys and then Past them to your 
+# 'local.properties' file in your root directory,
+# keep the original data.
+#  
+# - Web Client ID from Google Cloud Console,
+# - the Url to the backend
+# - choose a password for the admin to log in
+
+WEB_CLIENT_ID=""
+
+BASE_URL_BACKEND=""
+
+ROOT_ADMIN_PASSWORD=""
